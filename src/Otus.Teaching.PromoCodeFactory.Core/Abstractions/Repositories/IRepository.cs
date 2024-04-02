@@ -6,10 +6,12 @@ using Otus.Teaching.PromoCodeFactory.Core.Domain;
 namespace Otus.Teaching.PromoCodeFactory.Core.Abstractions.Repositories
 {
     public interface IRepository<T>
-        where T: BaseEntity
+        where T : BaseEntity
     {
+        Task<T> AddAsync(T entity);
         Task<IEnumerable<T>> GetAllAsync();
-        
         Task<T> GetByIdAsync(Guid id);
+        Task<bool> RemoveAsync(Guid id);
+        Task<T> UpdateAsync(T entity);
     }
 }
