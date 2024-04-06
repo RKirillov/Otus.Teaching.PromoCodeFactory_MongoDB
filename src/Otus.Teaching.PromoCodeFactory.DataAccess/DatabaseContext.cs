@@ -48,7 +48,7 @@ namespace Otus.Teaching.PromoCodeFactory.DataAccess
         /// <summary>
         /// Роли.
         /// </summary>
-        public DbSet<Role> Roles { get; set; }
+        //public DbSet<Role> Roles { get; set; }
 
         /// <summary>
         /// Роли.
@@ -91,15 +91,15 @@ namespace Otus.Teaching.PromoCodeFactory.DataAccess
                 .WithOne(g => g.Employee)
                 .HasForeignKey<Role>(g => g.EmployeeId);*/
 
-            modelBuilder.Entity<Role>()
+/*            modelBuilder.Entity<Role>()
                 .HasOne<Employee>(s => s.Employee)
                 .WithOne(g => g.Role)
-                .HasForeignKey<Role>(g => g.EmployeeId);
+                .HasForeignKey<Role>(g => g.EmployeeId);*/
 
-/*            modelBuilder.Entity<Employee>()
+            modelBuilder.Entity<Employee>()
                 .HasOne<Role>(s => s.Role)
-                .WithOne(g => g.Employee);*/
-                //.HasForeignKey<Role>(g => g.EmployeeId);
+                .WithOne(g => g.Employee)
+                .HasForeignKey<Role>(g => g.EmployeeId);
 
             //modelBuilder.Entity<Customer>().Property(c => c.FirstName).HasMaxLength(100);
             //modelBuilder.Entity<Preference>().Property(c => c.Name).HasMaxLength(100);
