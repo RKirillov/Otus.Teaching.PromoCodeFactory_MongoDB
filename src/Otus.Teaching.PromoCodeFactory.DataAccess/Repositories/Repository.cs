@@ -17,13 +17,13 @@ namespace Otus.Teaching.PromoCodeFactory.DataAccess.Repositories
         where T: BaseEntity
         //: class, IEntity<TPrimaryKey>
     {
-        protected readonly DbContext Context;
+        protected readonly DbContext _context;
         private readonly DbSet<T> _entitySet;
 
         protected Repository(DbContext context)
         {
-            Context = context;
-            _entitySet = Context.Set<T>();
+            _context = context;
+            _entitySet = _context.Set<T>();
         }
         #region Get
 
@@ -76,13 +76,25 @@ namespace Otus.Teaching.PromoCodeFactory.DataAccess.Repositories
         }
         #endregion
 
+        #region Add
+        /// <summary>
+        /// Добавить в базу массив сущностей.
+        /// </summary>
+        /// <param name="entities"> Массив сущностей. </param>
+        public virtual void AddRange(List<T> entities)
+        {
+            var enumerable = entities as IList<T> ?? entities.ToList();
+            _entitySet.AddRange(enumerable);
+        }
+        #endregion
+
         #region SaveChanges
         /// <summary>
         /// Сохранить изменения.
         /// </summary>
         public virtual void SaveChanges()
         {
-            Context.SaveChanges();
+            _context.SaveChanges();
         }
 
         /// <summary>
@@ -90,7 +102,7 @@ namespace Otus.Teaching.PromoCodeFactory.DataAccess.Repositories
         /// </summary>
         public virtual async Task SaveChangesAsync(CancellationToken cancellationToken = default)
         {
-            await Context.SaveChangesAsync(cancellationToken);
+            await _context.SaveChangesAsync(cancellationToken);
         }
         #endregion
     }

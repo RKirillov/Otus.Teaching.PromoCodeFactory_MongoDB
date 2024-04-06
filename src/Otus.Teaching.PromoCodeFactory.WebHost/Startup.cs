@@ -1,4 +1,5 @@
 
+using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -11,6 +12,7 @@ using Otus.Teaching.PromoCodeFactory.Core.Options;
 using Otus.Teaching.PromoCodeFactory.DataAccess;
 using Otus.Teaching.PromoCodeFactory.DataAccess.Data;
 using Otus.Teaching.PromoCodeFactory.DataAccess.Repositories;
+using System.Reflection;
 
 namespace Otus.Teaching.PromoCodeFactory.WebHost
 {
@@ -25,7 +27,11 @@ namespace Otus.Teaching.PromoCodeFactory.WebHost
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            var executedAssembly = Assembly.GetExecutingAssembly();
+            var config = new MapperConfiguration(cfg => cfg.AddMaps(executedAssembly));
+                        
             services.AddControllers();
+            services.AddSingleton(_ => config.CreateMapper());
             services.AddSingleton(typeof(IRepository<Employee>), (x) =>
                 new InMemoryRepository<Employee>(FakeDataFactory.Employees));
             services.AddSingleton(typeof(IRepository<Role>), (x) =>
@@ -41,9 +47,11 @@ namespace Otus.Teaching.PromoCodeFactory.WebHost
                 options.Version = "1.0";
             });
 
-            var options = Configuration.Get<ConnectionOptions>();
-            // services.AddDbContext<DatabaseContext>();
+            var options = Configuration.GetSection<ConnectionOptions>();
             services.AddSingleton(options);
+            services.AddDbContext<DatabaseContext>();
+
+            services.AddScoped<IEmployeeRepository, EmployeeRepository>();
             /*            services.AddSwaggerGen(c =>
                         {
                             c.SwaggerDoc("v1", new OpenApiInfo { Title = "DataflowToUpper", Version = "v1" });
@@ -78,6 +86,24 @@ namespace Otus.Teaching.PromoCodeFactory.WebHost
             {
                 endpoints.MapControllers();
             });
+        }
+    }
+    /// <summary>
+    /// Расширения для конфигурации приложения
+    /// </summary>
+    public static class ConfigurationExtensions
+    {
+        /// <summary>
+        /// Получить объект конфигурации из appsettings.json
+        /// </summary>
+        /// <typeparam name="TEntity"></typeparam>
+        /// <param name="configuration">Конфигурация приложения</param>
+        /// <param name="sectionName">Наименование json секции</param>
+        /// <returns>Возвращает преобразованный объект типа TEntity в случае наличия секции, иначе выдает исключение</returns>
+        public static TEntity GetSection<TEntity>(this IConfiguration configuration, string? sectionName = null)
+        {
+            sectionName ??= typeof(TEntity).Name;
+            return configuration.GetSection(sectionName).Get<TEntity>();
         }
     }
 }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Otus.Teaching.PromoCodeFactory.DataAccess.Services
 {
-    public class PromoService
+    public class CustomerService
     {
     }
 }

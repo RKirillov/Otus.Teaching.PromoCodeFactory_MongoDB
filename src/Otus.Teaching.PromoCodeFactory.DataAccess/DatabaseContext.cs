@@ -7,23 +7,10 @@ using Microsoft.Extensions.Logging;
 using Otus.Teaching.PromoCodeFactory.Core.Domain.Administration;
 using Otus.Teaching.PromoCodeFactory.Core.Domain.PromoCodeManagement;
 using Otus.Teaching.PromoCodeFactory.Core.Options;
+using Otus.Teaching.PromoCodeFactory.DataAccess.Data;
 
 namespace Otus.Teaching.PromoCodeFactory.DataAccess
 {
-    public class Student
-    {
-        //public int Id { get; set; }
-        public string Name { get; set; }
-        public Grade Grade { get; set; }
-    }
-
-    public class Grade
-    {
-        public int GradeId { get; set; }
-        public string GradeName { get; set; }
-        public string Section { get; set; }
-        public ICollection<Student> Students { get; set; }
-    }
     /// <summary>
     /// Контекст.
     /// </summary>
@@ -33,30 +20,30 @@ namespace Otus.Teaching.PromoCodeFactory.DataAccess
 
         public DatabaseContext(DbContextOptions<DatabaseContext> options, ConnectionOptions connectionOptions) : base(options)
         {
+            _connectionOptions = connectionOptions;
             Database.EnsureDeleted();
             Database.EnsureCreated();
-            _connectionOptions=connectionOptions;
         }
         //TODO не все нужно объявлять в DBSet, стр 446
         /// <summary>
         /// Клиенты.
         /// </summary>
-        public DbSet<Customer> Customers { get; set; }
+        //public DbSet<Customer> Customers { get; set; }
 
         /// <summary>
         /// Предпочтения.
         /// </summary>
-        public DbSet<Preference> Preferences { get; set; }
+        //public DbSet<Preference> Preferences { get; set; }
 
         /// <summary>
         /// Сущность для Many-To-Many Customer/Preference
         /// </summary>
-        public DbSet<CustomerPreference> CustomerPreferences { get; set; }
+        //public DbSet<CustomerPreference> CustomerPreferences { get; set; }
 
         /// <summary>
         /// Промокоды.
         /// </summary>
-        public DbSet<PromoCode> PromoCodes { get; set; }
+        //public DbSet<PromoCode> PromoCodes { get; set; }
 
         /// <summary>
         /// Роли.
@@ -76,7 +63,7 @@ namespace Otus.Teaching.PromoCodeFactory.DataAccess
 */
 
             //TODO ???
-            base.OnModelCreating(modelBuilder);
+/*            base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<CustomerPreference>().HasKey(sc => new { sc.CustomerId, sc.PreferenceId });
 
             modelBuilder.Entity<CustomerPreference>()
@@ -97,21 +84,37 @@ namespace Otus.Teaching.PromoCodeFactory.DataAccess
             modelBuilder.Entity<PromoCode>()
                 .HasOne<Preference>(s => s.Preference)
                 .WithOne(g => g.PromoCode)
-                .HasForeignKey<Preference>(s => s.PromoCodeId);//необязательно, надо ли объявлять ключи??
+                .HasForeignKey<Preference>(s => s.PromoCodeId);//необязательно, надо ли объявлять ключи??*/
 
-            modelBuilder.Entity<Employee>()
+/*            modelBuilder.Entity<Employee>()
                 .HasOne<Role>(s => s.Role)
                 .WithOne(g => g.Employee)
-                .HasForeignKey<Role>(s => s.EmployeeId);
+                .HasForeignKey<Role>(g => g.EmployeeId);*/
 
-            modelBuilder.Entity<Customer>().Property(c => c.FirstName).HasMaxLength(100);
-            modelBuilder.Entity<Preference>().Property(c => c.Name).HasMaxLength(100);
+            modelBuilder.Entity<Role>()
+                .HasOne<Employee>(s => s.Employee)
+                .WithOne(g => g.Role)
+                .HasForeignKey<Role>(g => g.EmployeeId);
+
+/*            modelBuilder.Entity<Employee>()
+                .HasOne<Role>(s => s.Role)
+                .WithOne(g => g.Employee);*/
+                //.HasForeignKey<Role>(g => g.EmployeeId);
+
+            //modelBuilder.Entity<Customer>().Property(c => c.FirstName).HasMaxLength(100);
+            //modelBuilder.Entity<Preference>().Property(c => c.Name).HasMaxLength(100);
+
+            //Инициализация начальных данных
+            //modelBuilder.Entity<Employee>().HasData(FakeDataFactory.Employees.ToArray());
+            modelBuilder.Entity<Role>().HasData(FakeDataFactory.Roles);
+            modelBuilder.Entity<Employee>().HasData(FakeDataFactory.Employees);
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.LogTo(Console.WriteLine, LogLevel.Information);
+
             optionsBuilder.UseSqlite(_connectionOptions.ConnectionString);
+            optionsBuilder.LogTo(Console.WriteLine, LogLevel.Information);
         }
     }
 }
