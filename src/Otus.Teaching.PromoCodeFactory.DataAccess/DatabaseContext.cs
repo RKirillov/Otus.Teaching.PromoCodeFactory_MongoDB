@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Otus.Teaching.PromoCodeFactory.Core.Domain.Administration;
 using Otus.Teaching.PromoCodeFactory.Core.Domain.PromoCodeManagement;
+using Otus.Teaching.PromoCodeFactory.Core.Options;
 
 namespace Otus.Teaching.PromoCodeFactory.DataAccess
 {
@@ -20,7 +22,6 @@ namespace Otus.Teaching.PromoCodeFactory.DataAccess
         public int GradeId { get; set; }
         public string GradeName { get; set; }
         public string Section { get; set; }
-
         public ICollection<Student> Students { get; set; }
     }
     /// <summary>
@@ -28,10 +29,15 @@ namespace Otus.Teaching.PromoCodeFactory.DataAccess
     /// </summary>
     public class DatabaseContext : DbContext
     {
-        public DatabaseContext(DbContextOptions<DatabaseContext> options) : base(options)
-        {
-        }
+        private ConnectionOptions _connectionOptions { get; set; }
 
+        public DatabaseContext(DbContextOptions<DatabaseContext> options, ConnectionOptions connectionOptions) : base(options)
+        {
+            Database.EnsureDeleted();
+            Database.EnsureCreated();
+            _connectionOptions=connectionOptions;
+        }
+        //TODO не все нужно объявлять в DBSet, стр 446
         /// <summary>
         /// Клиенты.
         /// </summary>
@@ -52,19 +58,23 @@ namespace Otus.Teaching.PromoCodeFactory.DataAccess
         /// </summary>
         public DbSet<PromoCode> PromoCodes { get; set; }
 
-
         /// <summary>
         /// Роли.
         /// </summary>
         public DbSet<Role> Roles { get; set; }
 
-
         /// <summary>
         /// Роли.
         /// </summary>
         public DbSet<Employee> Employees { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+/*            modelBuilder.Entity<Blog>()
+                .Property(b => b.Url)
+                .IsRequired();
+*/
+
             //TODO ???
             base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<CustomerPreference>().HasKey(sc => new { sc.CustomerId, sc.PreferenceId });
@@ -79,22 +89,29 @@ namespace Otus.Teaching.PromoCodeFactory.DataAccess
                 .WithMany(s => s.CustomerPreference)
                 .HasForeignKey(sc => sc.PreferenceId);
 
-
             modelBuilder.Entity<PromoCode>()
                 .HasOne<Customer>(s => s.Customer)
                 .WithMany(g => g.Promocodes)
-                .HasForeignKey(s => s.Id);
+                .HasForeignKey(s => s.CustomerId);
 
+            modelBuilder.Entity<PromoCode>()
+                .HasOne<Preference>(s => s.Preference)
+                .WithOne(g => g.PromoCode)
+                .HasForeignKey<Preference>(s => s.PromoCodeId);//необязательно, надо ли объявлять ключи??
+
+            modelBuilder.Entity<Employee>()
+                .HasOne<Role>(s => s.Role)
+                .WithOne(g => g.Employee)
+                .HasForeignKey<Role>(s => s.EmployeeId);
 
             modelBuilder.Entity<Customer>().Property(c => c.FirstName).HasMaxLength(100);
             modelBuilder.Entity<Preference>().Property(c => c.Name).HasMaxLength(100);
-
-
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.LogTo(Console.WriteLine, LogLevel.Information);
+            optionsBuilder.UseSqlite(_connectionOptions.ConnectionString);
         }
     }
 }

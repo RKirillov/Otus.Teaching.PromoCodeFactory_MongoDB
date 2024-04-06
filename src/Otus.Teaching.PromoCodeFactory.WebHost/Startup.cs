@@ -1,11 +1,14 @@
 
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Otus.Teaching.PromoCodeFactory.Core.Abstractions.Repositories;
 using Otus.Teaching.PromoCodeFactory.Core.Domain.Administration;
 using Otus.Teaching.PromoCodeFactory.Core.Domain.PromoCodeManagement;
+using Otus.Teaching.PromoCodeFactory.Core.Options;
+using Otus.Teaching.PromoCodeFactory.DataAccess;
 using Otus.Teaching.PromoCodeFactory.DataAccess.Data;
 using Otus.Teaching.PromoCodeFactory.DataAccess.Repositories;
 
@@ -13,6 +16,11 @@ namespace Otus.Teaching.PromoCodeFactory.WebHost
 {
     public class Startup
     {
+        public Startup(IConfiguration configuration)
+        {
+            Configuration = configuration;
+        }
+        public IConfiguration Configuration { get; }
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
@@ -32,12 +40,16 @@ namespace Otus.Teaching.PromoCodeFactory.WebHost
                 options.Title = "PromoCode Factory API Doc";
                 options.Version = "1.0";
             });
-/*            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "DataflowToUpper", Version = "v1" });
-                c.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory,
-                $"{Assembly.GetExecutingAssembly().GetName().Name}.xml"));
-            });*/
+
+            var options = Configuration.Get<ConnectionOptions>();
+            // services.AddDbContext<DatabaseContext>();
+            services.AddSingleton(options);
+            /*            services.AddSwaggerGen(c =>
+                        {
+                            c.SwaggerDoc("v1", new OpenApiInfo { Title = "DataflowToUpper", Version = "v1" });
+                            c.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory,
+                            $"{Assembly.GetExecutingAssembly().GetName().Name}.xml"));
+                        });*/
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
