@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace Otus.Teaching.PromoCodeFactory.Core.Domain.PromoCodeManagement
 {
     public class Preference
-        :BaseEntity
+        : BaseEntity
     {
         public string Name { get; set; }
 
@@ -12,6 +12,6 @@ namespace Otus.Teaching.PromoCodeFactory.Core.Domain.PromoCodeManagement
         //добавил
         public PromoCode PromoCode { get; set; }
 
-        public ICollection<CustomerPreference> CustomerPreference { get; set; }
+        public IList<CustomerPreference> CustomerPreference { get; set; }
     }
 }
