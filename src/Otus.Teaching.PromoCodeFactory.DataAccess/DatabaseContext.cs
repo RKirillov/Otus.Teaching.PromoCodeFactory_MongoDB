@@ -117,7 +117,7 @@ namespace Otus.Teaching.PromoCodeFactory.DataAccess
             modelBuilder.Entity<Preference>().HasData(FakeDataFactory.Preferences);
             modelBuilder.Entity<Customer>().HasData(FakeDataFactory.Customers);
 
-            //modelBuilder.Entity<PromoCode>().HasData(FakeDataFactory.PromoCodes);
+            modelBuilder.Entity<PromoCode>().HasData(FakeDataFactory.PromoCodes);
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
