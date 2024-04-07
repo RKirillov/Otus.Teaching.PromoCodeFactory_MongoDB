@@ -17,12 +17,13 @@ namespace Otus.Teaching.PromoCodeFactory.Core.Domain.PromoCodeManagement
 
         public string PartnerName { get; set; }
 
-        public Employee PartnerManager { get; set; }
+        //public Employee PartnerManager { get; set; }
 
-        public Preference Preference { get; set; }
+        //public Preference Preference { get; set; }
 
         public Guid CustomerId { get; set; }
 
         public Customer Customer { get; set; }
+        //TODO добавлен CustomerId Связь Customer и Promocode реализовать через One-To-Many
     }
 }

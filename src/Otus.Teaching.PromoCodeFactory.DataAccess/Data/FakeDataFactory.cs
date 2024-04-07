@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Castle.Core.Resource;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Otus.Teaching.PromoCodeFactory.Core.Domain.Administration;
 using Otus.Teaching.PromoCodeFactory.Core.Domain.PromoCodeManagement;
 
@@ -48,7 +50,7 @@ namespace Otus.Teaching.PromoCodeFactory.DataAccess.Data
                 //TODO добавил EmployeeId
             }
         };
-        
+
         public static List<Preference> Preferences => new List<Preference>()
         {
             new Preference()
@@ -73,6 +75,19 @@ namespace Otus.Teaching.PromoCodeFactory.DataAccess.Data
             get
             {
                 var customerId = Guid.Parse("a6c8c6b1-4349-45b0-ab31-244740aaf0f0");
+                var customerPreferences = new List<CustomerPreference>()
+                {
+                    new CustomerPreference
+                    {
+                        CustomerId=customerId,
+                        PreferenceId=Guid.Parse("ef7f299f-92d7-459f-896e-078ed53ef99c"),
+                    },
+                    new CustomerPreference
+                    {
+                        CustomerId=customerId,
+                        PreferenceId=Guid.Parse("c4bda62e-fc74-4256-a956-4760b3858cbd"),
+                    }
+                };
                 var customers = new List<Customer>()
                 {
                     new Customer()
@@ -81,11 +96,42 @@ namespace Otus.Teaching.PromoCodeFactory.DataAccess.Data
                         Email = "ivan_sergeev@mail.ru",
                         FirstName = "Иван",
                         LastName = "Петров",
-                        //TODO: Добавить предзаполненный список предпочтений
+                        //CustomerPreference=customerPreferences,
+                        //TODO: Добавить предзаполненный список предпочтений Done
                     }
                 };
-
                 return customers;
+            }
+        }
+
+        public static List<PromoCode> PromoCodes
+        {
+            get
+            {
+                var promocodes = new List<PromoCode>()
+                {
+                    new PromoCode()
+                    {
+                        Id = Guid.Parse("2d5c0b24-0f61-4ae3-ad2a-e0ded5153d09"),
+                        ServiceInfo = "Сервисная информация",
+                        BeginDate = DateTime.Now,
+                        EndDate = DateTime.Now.AddDays(1),
+                        PartnerName="Рога и Копыта",
+                        CustomerId = Customers.FirstOrDefault().Id,
+                        //TODO: 
+                    },
+                    new PromoCode()
+                    {
+                        Id = Guid.Parse("f766e2bf-340a-46ea-bff3-f1700b435895"),
+                        ServiceInfo = "Сервисная информация",
+                        BeginDate = DateTime.Now.AddDays(-1),
+                        EndDate = DateTime.Now.AddDays(2),
+                        PartnerName="Домик в Деревне",
+                        CustomerId = Customers.FirstOrDefault().Id,
+                        //TODO: 
+                    }
+                };
+                return promocodes;
             }
         }
     }

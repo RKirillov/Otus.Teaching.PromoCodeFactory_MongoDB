@@ -28,7 +28,7 @@ namespace Otus.Teaching.PromoCodeFactory.DataAccess
         /// <summary>
         /// Клиенты.
         /// </summary>
-        //public DbSet<Customer> Customers { get; set; }
+        public DbSet<Customer> Customers { get; set; }
 
         /// <summary>
         /// Предпочтения.
@@ -57,10 +57,10 @@ namespace Otus.Teaching.PromoCodeFactory.DataAccess
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-/*            modelBuilder.Entity<Blog>()
-                .Property(b => b.Url)
-                .IsRequired();
-*/
+            /*            modelBuilder.Entity<Blog>()
+                            .Property(b => b.Url)
+                            .IsRequired();
+            */
 
             //TODO ???
 /*            base.OnModelCreating(modelBuilder);
@@ -74,27 +74,24 @@ namespace Otus.Teaching.PromoCodeFactory.DataAccess
             modelBuilder.Entity<CustomerPreference>()
                 .HasOne<Preference>(sc => sc.Preference)
                 .WithMany(s => s.CustomerPreference)
-                .HasForeignKey(sc => sc.PreferenceId);
+                .HasForeignKey(sc => sc.PreferenceId);*/
 
             modelBuilder.Entity<PromoCode>()
                 .HasOne<Customer>(s => s.Customer)
                 .WithMany(g => g.Promocodes)
                 .HasForeignKey(s => s.CustomerId);
 
-            modelBuilder.Entity<PromoCode>()
+/*            modelBuilder.Entity<PromoCode>()
                 .HasOne<Preference>(s => s.Preference)
                 .WithOne(g => g.PromoCode)
                 .HasForeignKey<Preference>(s => s.PromoCodeId);//необязательно, надо ли объявлять ключи??*/
 
-/*            modelBuilder.Entity<Employee>()
-                .HasOne<Role>(s => s.Role)
-                .WithOne(g => g.Employee)
-                .HasForeignKey<Role>(g => g.EmployeeId);*/
 
-/*            modelBuilder.Entity<Role>()
-                .HasOne<Employee>(s => s.Employee)
-                .WithOne(g => g.Role)
-                .HasForeignKey<Role>(g => g.EmployeeId);*/
+
+            /*            modelBuilder.Entity<Role>()
+                            .HasOne<Employee>(s => s.Employee)
+                            .WithOne(g => g.Role)
+                            .HasForeignKey<Role>(g => g.EmployeeId);*/
 
             modelBuilder.Entity<Employee>()
                 .HasOne<Role>(s => s.Role)
@@ -105,9 +102,10 @@ namespace Otus.Teaching.PromoCodeFactory.DataAccess
             //modelBuilder.Entity<Preference>().Property(c => c.Name).HasMaxLength(100);
 
             //Инициализация начальных данных
-            //modelBuilder.Entity<Employee>().HasData(FakeDataFactory.Employees.ToArray());
             modelBuilder.Entity<Role>().HasData(FakeDataFactory.Roles);
             modelBuilder.Entity<Employee>().HasData(FakeDataFactory.Employees);
+            modelBuilder.Entity<PromoCode>().HasData(FakeDataFactory.PromoCodes);
+            modelBuilder.Entity<Customer>().HasData(FakeDataFactory.Customers);
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

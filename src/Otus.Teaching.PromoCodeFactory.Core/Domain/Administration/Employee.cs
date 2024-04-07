@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Otus.Teaching.PromoCodeFactory.Core.Domain.PromoCodeManagement;
+using System;
 using System.Collections.Generic;
 
 namespace Otus.Teaching.PromoCodeFactory.Core.Domain.Administration
@@ -14,6 +15,9 @@ namespace Otus.Teaching.PromoCodeFactory.Core.Domain.Administration
         public string Email { get; set; }
 
         public Role Role { get; set; }
+
+        //добавил
+        public PromoCode PromoCode { get; set; }
 
         public int AppliedPromocodesCount { get; set; }
     }
