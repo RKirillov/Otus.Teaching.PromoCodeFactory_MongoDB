@@ -79,13 +79,13 @@ namespace Otus.Teaching.PromoCodeFactory.DataAccess
 
             modelBuilder.Entity<PromoCode>()
                 .HasOne<Customer>(s => s.Customer)
-                .WithMany(g => g.Promocodes)
+                .WithMany(g => g.PromoCodes)
                 .HasForeignKey(s => s.CustomerId);
 
-            modelBuilder.Entity<PromoCode>()
+/*            modelBuilder.Entity<PromoCode>()
                 .HasOne<Preference>(s => s.Preference)
                 .WithOne(g => g.PromoCode)
-                .HasForeignKey<Preference>(s => s.PromoCodeId);
+                .HasForeignKey<Preference>(s => s.PromoCodeId);*/
             /*
                             modelBuilder.Entity<PromoCode>()
                            .HasOne<Preference>(s => s.Preference)
@@ -112,12 +112,12 @@ namespace Otus.Teaching.PromoCodeFactory.DataAccess
             //Инициализация начальных данных
             modelBuilder.Entity<Role>().HasData(FakeDataFactory.Roles);
             modelBuilder.Entity<Employee>().HasData(FakeDataFactory.Employees);
-
+            
             modelBuilder.Entity<CustomerPreference>().HasData(FakeDataFactory.CustomerPreferences);
             modelBuilder.Entity<Preference>().HasData(FakeDataFactory.Preferences);
             modelBuilder.Entity<Customer>().HasData(FakeDataFactory.Customers);
+            //modelBuilder.Entity<PromoCode>().HasData(FakeDataFactory.PromoCodes);
 
-            modelBuilder.Entity<PromoCode>().HasData(FakeDataFactory.PromoCodes);
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

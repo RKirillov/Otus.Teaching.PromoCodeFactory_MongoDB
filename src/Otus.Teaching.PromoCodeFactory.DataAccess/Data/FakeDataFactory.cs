@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata.Ecma335;
+using Castle.Core.Resource;
 using Otus.Teaching.PromoCodeFactory.Core.Domain.Administration;
 using Otus.Teaching.PromoCodeFactory.Core.Domain.PromoCodeManagement;
 
@@ -49,34 +51,11 @@ namespace Otus.Teaching.PromoCodeFactory.DataAccess.Data
             }
         };
 
-        public static List<Preference> Preferences => new List<Preference>()
-        {
-            new Preference()
-            {
-                Id = Guid.Parse("ef7f299f-92d7-459f-896e-078ed53ef99c"),
-                PromoCodeId=Guid.Parse("a6c8c6b1-4349-45b0-ab31-244740aaf0f0"),
-                Name = "Театр",
-            },
-            new Preference()
-            {
-                Id = Guid.Parse("c4bda62e-fc74-4256-a956-4760b3858cbd"),
-                PromoCodeId=Guid.Parse("a6c8c6b1-4349-45b0-ab31-244740aaf0f0"),
-                Name = "Семья",
-            },
-            new Preference()
-            {
-                Id = Guid.Parse("76324c47-68d2-472d-abb8-33cfa8cc0c84"),
-                PromoCodeId=Guid.Parse("a6c8c6b1-4349-45b0-ab31-244740aaf0f0"),
-                Name = "Дети",
-            }
-        };
-
-        public static List<Customer> Customers
+        public static List<Preference> Preferences
         {
             get
             {
                 var customerId = Guid.Parse("a6c8c6b1-4349-45b0-ab31-244740aaf0f0");
-
                 var сustomerPreference = new List<CustomerPreference>()
                 {
                     new CustomerPreference
@@ -90,6 +69,52 @@ namespace Otus.Teaching.PromoCodeFactory.DataAccess.Data
                         PreferenceId = Guid.Parse("c4bda62e-fc74-4256-a956-4760b3858cbd"),
                     }
                 };
+            var preferences = new List<Preference>()
+            {
+                    new Preference()
+                {
+                        Id = Guid.Parse("ef7f299f-92d7-459f-896e-078ed53ef99c"),
+                        PromoCodeId = Guid.Parse("2d5c0b24-0f61-4ae3-ad2a-e0ded5153d09"),
+                        Name = "Театр",
+                        CustomerPreference=new List < CustomerPreference >(),
+                    },
+                    new Preference()
+                {
+                        Id = Guid.Parse("c4bda62e-fc74-4256-a956-4760b3858cbd"),
+                        PromoCodeId = Guid.Parse("f766e2bf-340a-46ea-bff3-f1700b435895"),
+                        Name = "Семья",
+                        CustomerPreference=new List<CustomerPreference>(),
+                    },
+                    new Preference()
+                {
+                        Id = Guid.Parse("76324c47-68d2-472d-abb8-33cfa8cc0c84"),
+                        PromoCodeId = Guid.Parse("f766e2bf-340a-46ea-bff3-f1700b435895"),
+                        Name = "Дети",
+                        CustomerPreference=new List < CustomerPreference >(),
+                    }
+                    };
+                return preferences;
+            }
+        }
+
+        public static List<Customer> Customers
+        {
+            get
+            {
+                var customerId = Guid.Parse("a6c8c6b1-4349-45b0-ab31-244740aaf0f0");
+/*                var сustomerPreference = new List<CustomerPreference>()
+                {
+                    new CustomerPreference
+                    {
+                        CustomerId = customerId,
+                        PreferenceId = Guid.Parse("ef7f299f-92d7-459f-896e-078ed53ef99c"),
+                    },
+                    new CustomerPreference
+                    {
+                        CustomerId = customerId,
+                        PreferenceId = Guid.Parse("c4bda62e-fc74-4256-a956-4760b3858cbd"),
+                    }
+                };*/
                 var customers = new List<Customer>()
                 {
                     new Customer()
@@ -98,7 +123,8 @@ namespace Otus.Teaching.PromoCodeFactory.DataAccess.Data
                         Email = "ivan_sergeev@mail.ru",
                         FirstName = "Иван",
                         LastName = "Петров",
-                        CustomerPreference=сustomerPreference,
+                        CustomerPreference=new List<CustomerPreference>(),
+                        PromoCodes=new List<PromoCode> ()
                         //TODO: Добавить предзаполненный список предпочтений Done
                     }
                 };
@@ -132,9 +158,10 @@ namespace Otus.Teaching.PromoCodeFactory.DataAccess.Data
                         EndDate = DateTime.Now.AddDays(1),
                         PartnerName="Рога и Копыта",
                         CustomerId = Guid.Parse("a6c8c6b1-4349-45b0-ab31-244740aaf0f0"),
+                        //Customer=new Customer()
                         //TODO: 
                     },
-                    new PromoCode()
+ /*                   new PromoCode()
                     {
                         Id = Guid.Parse("f766e2bf-340a-46ea-bff3-f1700b435895"),
                         ServiceInfo = "Сервисная информация",
@@ -143,7 +170,7 @@ namespace Otus.Teaching.PromoCodeFactory.DataAccess.Data
                         PartnerName="Домик в Деревне",
                         CustomerId = Guid.Parse("a6c8c6b1-4349-45b0-ab31-244740aaf0f0"),
                         //TODO: 
-                    }
+                    }*/
         };
     }
 }

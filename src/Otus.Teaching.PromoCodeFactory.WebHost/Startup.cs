@@ -49,7 +49,10 @@ namespace Otus.Teaching.PromoCodeFactory.WebHost
 
             var options = Configuration.GetSection<ConnectionOptions>();
             services.AddSingleton(options);
-            services.AddDbContext<DatabaseContext>();
+            services.AddDbContext<DatabaseContext>(opt =>
+            {
+                opt.EnableSensitiveDataLogging();
+            });
 
             services.AddScoped<IEmployeeRepository, EmployeeRepository>();
             /*            services.AddSwaggerGen(c =>
