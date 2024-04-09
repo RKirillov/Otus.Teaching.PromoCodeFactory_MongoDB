@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection.Metadata.Ecma335;
-using Castle.Core.Resource;
 using Otus.Teaching.PromoCodeFactory.Core.Domain.Administration;
 using Otus.Teaching.PromoCodeFactory.Core.Domain.PromoCodeManagement;
 
@@ -55,7 +53,7 @@ namespace Otus.Teaching.PromoCodeFactory.DataAccess.Data
         {
             get
             {
-                var customerId = Guid.Parse("a6c8c6b1-4349-45b0-ab31-244740aaf0f0");
+/*                var customerId = Guid.Parse("a6c8c6b1-4349-45b0-ab31-244740aaf0f0");
                 var сustomerPreference = new List<CustomerPreference>()
                 {
                     new CustomerPreference
@@ -68,7 +66,7 @@ namespace Otus.Teaching.PromoCodeFactory.DataAccess.Data
                         CustomerId = customerId,
                         PreferenceId = Guid.Parse("c4bda62e-fc74-4256-a956-4760b3858cbd"),
                     }
-                };
+                };*/
             var preferences = new List<Preference>()
             {
                     new Preference()
@@ -76,19 +74,19 @@ namespace Otus.Teaching.PromoCodeFactory.DataAccess.Data
                         Id = Guid.Parse("ef7f299f-92d7-459f-896e-078ed53ef99c"),
                         PromoCodeId = Guid.Parse("2d5c0b24-0f61-4ae3-ad2a-e0ded5153d09"),
                         Name = "Театр",
-                        CustomerPreference=new List < CustomerPreference >(),
+                        CustomerPreference=new List <CustomerPreference>(),
                     },
                     new Preference()
                 {
                         Id = Guid.Parse("c4bda62e-fc74-4256-a956-4760b3858cbd"),
-                        PromoCodeId = Guid.Parse("f766e2bf-340a-46ea-bff3-f1700b435895"),
+                        PromoCodeId = Guid.Parse("33867eef-321b-4b88-a4e6-e57f77e3e57a"),
                         Name = "Семья",
                         CustomerPreference=new List<CustomerPreference>(),
                     },
                     new Preference()
                 {
                         Id = Guid.Parse("76324c47-68d2-472d-abb8-33cfa8cc0c84"),
-                        PromoCodeId = Guid.Parse("f766e2bf-340a-46ea-bff3-f1700b435895"),
+                        PromoCodeId = Guid.Parse("fd49d9a9-609f-4376-bfb4-14b157aae3a9"),
                         Name = "Дети",
                         CustomerPreference=new List < CustomerPreference >(),
                     }
@@ -131,7 +129,7 @@ namespace Otus.Teaching.PromoCodeFactory.DataAccess.Data
                 return customers;
             }
         }
-
+        //TODO чето тут не то
         public static List<CustomerPreference> CustomerPreferences => new List<CustomerPreference>()
         {
 
@@ -144,6 +142,11 @@ namespace Otus.Teaching.PromoCodeFactory.DataAccess.Data
                     {
                         CustomerId=Guid.Parse("a6c8c6b1-4349-45b0-ab31-244740aaf0f0"),//Customers.FirstOrDefault().Id
                         PreferenceId = Guid.Parse("c4bda62e-fc74-4256-a956-4760b3858cbd"),
+                    },
+                    new CustomerPreference
+                    {
+                        CustomerId=Guid.Parse("a6c8c6b1-4349-45b0-ab31-244740aaf0f0"),//Customers.FirstOrDefault().Id
+                        PreferenceId = Guid.Parse("76324c47-68d2-472d-abb8-33cfa8cc0c84"),
                     }
 
         };
@@ -153,7 +156,7 @@ namespace Otus.Teaching.PromoCodeFactory.DataAccess.Data
                     new PromoCode()
                     {
                         Id = Guid.Parse("2d5c0b24-0f61-4ae3-ad2a-e0ded5153d09"),
-                        ServiceInfo = "Сервисная информация",
+                        ServiceInfo = "Сервисная информация1",
                         BeginDate = DateTime.Now,
                         EndDate = DateTime.Now.AddDays(1),
                         PartnerName="Рога и Копыта",
@@ -161,16 +164,26 @@ namespace Otus.Teaching.PromoCodeFactory.DataAccess.Data
                         //Customer=new Customer()
                         //TODO: 
                     },
- /*                   new PromoCode()
+                    new PromoCode()
                     {
-                        Id = Guid.Parse("f766e2bf-340a-46ea-bff3-f1700b435895"),
-                        ServiceInfo = "Сервисная информация",
+                        Id = Guid.Parse("33867eef-321b-4b88-a4e6-e57f77e3e57a"),
+                        ServiceInfo = "Сервисная информация2",
                         BeginDate = DateTime.Now.AddDays(-1),
                         EndDate = DateTime.Now.AddDays(2),
                         PartnerName="Домик в Деревне",
                         CustomerId = Guid.Parse("a6c8c6b1-4349-45b0-ab31-244740aaf0f0"),
                         //TODO: 
-                    }*/
+                    },
+                    new PromoCode()
+                    {
+                        Id = Guid.Parse("fd49d9a9-609f-4376-bfb4-14b157aae3a9"),
+                        ServiceInfo = "Сервисная информация3",
+                        BeginDate = DateTime.Now.AddDays(-3),
+                        EndDate = DateTime.Now.AddDays(4),
+                        PartnerName="Интел",
+                        CustomerId = Guid.Parse("a6c8c6b1-4349-45b0-ab31-244740aaf0f0"),
+                        //TODO: 
+                    }
         };
     }
 }

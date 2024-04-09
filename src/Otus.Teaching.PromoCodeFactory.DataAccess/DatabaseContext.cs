@@ -65,41 +65,29 @@ namespace Otus.Teaching.PromoCodeFactory.DataAccess
 
             //TODO ???
             base.OnModelCreating(modelBuilder);
-            modelBuilder.Entity<CustomerPreference>().HasKey(sc => new { sc.CustomerId, sc.PreferenceId });
+            modelBuilder.Entity<CustomerPreference>().HasKey(sc => new { sc.CustomerId, sc.PreferenceId });//
 
-            modelBuilder.Entity<CustomerPreference>()
+            modelBuilder.Entity<CustomerPreference>()//
                 .HasOne<Customer>(sc => sc.Customer)
                 .WithMany(s => s.CustomerPreference)
                 .HasForeignKey(sc => sc.CustomerId);
 
-            modelBuilder.Entity<CustomerPreference>()
+            modelBuilder.Entity<CustomerPreference>()//
                 .HasOne<Preference>(sc => sc.Preference)
                 .WithMany(s => s.CustomerPreference)
                 .HasForeignKey(sc => sc.PreferenceId);
 
-            modelBuilder.Entity<PromoCode>()
+            modelBuilder.Entity<PromoCode>()//
                 .HasOne<Customer>(s => s.Customer)
                 .WithMany(g => g.PromoCodes)
                 .HasForeignKey(s => s.CustomerId);
 
-/*            modelBuilder.Entity<PromoCode>()
+                 modelBuilder.Entity<PromoCode>()//
                 .HasOne<Preference>(s => s.Preference)
                 .WithOne(g => g.PromoCode)
-                .HasForeignKey<Preference>(s => s.PromoCodeId);*/
-            /*
-                            modelBuilder.Entity<PromoCode>()
-                           .HasOne<Preference>(s => s.Preference)
-                           .WithOne(g => g.PromoCode)
-                           .HasForeignKey<Preference>(s => s.PromoCodeId);//необязательно, надо ли объявлять ключи??*/
+                .HasForeignKey<Preference>(s => s.PromoCodeId);
 
-
-
-            /*            modelBuilder.Entity<Role>()
-                            .HasOne<Employee>(s => s.Employee)
-                            .WithOne(g => g.Role)
-                            .HasForeignKey<Role>(g => g.EmployeeId);*/
-
-            modelBuilder.Entity<Employee>()
+            modelBuilder.Entity<Employee>()//
                 .HasOne<Role>(s => s.Role)
                 .WithOne(g => g.Employee)
                 .HasForeignKey<Role>(g => g.EmployeeId);
@@ -112,11 +100,14 @@ namespace Otus.Teaching.PromoCodeFactory.DataAccess
             //Инициализация начальных данных
             modelBuilder.Entity<Role>().HasData(FakeDataFactory.Roles);
             modelBuilder.Entity<Employee>().HasData(FakeDataFactory.Employees);
-            
             modelBuilder.Entity<CustomerPreference>().HasData(FakeDataFactory.CustomerPreferences);
             modelBuilder.Entity<Preference>().HasData(FakeDataFactory.Preferences);
             modelBuilder.Entity<Customer>().HasData(FakeDataFactory.Customers);
-            //modelBuilder.Entity<PromoCode>().HasData(FakeDataFactory.PromoCodes);
+            modelBuilder.Entity<PromoCode>().HasData(FakeDataFactory.PromoCodes);
+
+
+
+
 
         }
 

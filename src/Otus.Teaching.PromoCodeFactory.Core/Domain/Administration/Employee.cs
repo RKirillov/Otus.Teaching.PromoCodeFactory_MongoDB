@@ -16,9 +16,6 @@ namespace Otus.Teaching.PromoCodeFactory.Core.Domain.Administration
 
         public Role Role { get; set; }
 
-        //добавил
-        public PromoCode PromoCode { get; set; }
-
         public int AppliedPromocodesCount { get; set; }
     }
 }
