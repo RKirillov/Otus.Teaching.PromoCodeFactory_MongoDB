@@ -1,8 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
+using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Xml;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 using Microsoft.Extensions.Logging;
 using Otus.Teaching.PromoCodeFactory.Core.Domain.Administration;
 using Otus.Teaching.PromoCodeFactory.Core.Domain.PromoCodeManagement;
@@ -58,13 +63,23 @@ namespace Otus.Teaching.PromoCodeFactory.DataAccess
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            /*            modelBuilder.Entity<Blog>()
-                            .Property(b => b.Url)
-                            .IsRequired();
-            */
+
+            modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());//Your assembly here
 
             //TODO ???
             base.OnModelCreating(modelBuilder);
+//ошибка
+/*            foreach (var entityType in modelBuilder.Model.GetEntityTypes())
+            {
+                foreach (var propertyInfo in entityType.ClrType.GetProperties())
+                {
+                    if (propertyInfo.PropertyType == typeof(string))
+                    {
+                        entityType.GetProperty(propertyInfo.Name)
+                            .SetMaxLength(1000);
+                    }
+                }
+            }*/
             modelBuilder.Entity<CustomerPreference>().HasKey(sc => new { sc.CustomerId, sc.PreferenceId });//
 
             modelBuilder.Entity<CustomerPreference>()//
@@ -92,7 +107,10 @@ namespace Otus.Teaching.PromoCodeFactory.DataAccess
                 .WithOne(g => g.Employee)
                 .HasForeignKey<Role>(g => g.EmployeeId);
 
-
+            modelBuilder.Entity<PromoCode>()//
+                .HasOne<Employee>(s => s.PartnerManager)
+                .WithMany(g => g.PromoCodes)
+                .HasForeignKey(s => s.PartnerManagerId);
 
             //modelBuilder.Entity<Customer>().Property(c => c.FirstName).HasMaxLength(100);
             //modelBuilder.Entity<Preference>().Property(c => c.Name).HasMaxLength(100);
@@ -105,10 +123,6 @@ namespace Otus.Teaching.PromoCodeFactory.DataAccess
             modelBuilder.Entity<Customer>().HasData(FakeDataFactory.Customers);
             modelBuilder.Entity<PromoCode>().HasData(FakeDataFactory.PromoCodes);
 
-
-
-
-
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -117,5 +131,15 @@ namespace Otus.Teaching.PromoCodeFactory.DataAccess
             optionsBuilder.UseSqlite(_connectionOptions.ConnectionString);
             optionsBuilder.LogTo(Console.WriteLine, LogLevel.Information);
         }
+
+        //не передать в sqllite
+        protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
+        {
+            configurationBuilder
+                .Properties<string>()
+                //.AreUnicode(false)
+                .HaveMaxLength(12);
+        }
     }
+
 }
