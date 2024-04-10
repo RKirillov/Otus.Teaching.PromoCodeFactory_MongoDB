@@ -68,7 +68,7 @@ namespace Otus.Teaching.PromoCodeFactory.DataAccess
 
             //TODO ???
             base.OnModelCreating(modelBuilder);
-//ошибка
+            //ошибка
 /*            foreach (var entityType in modelBuilder.Model.GetEntityTypes())
             {
                 foreach (var propertyInfo in entityType.ClrType.GetProperties())
