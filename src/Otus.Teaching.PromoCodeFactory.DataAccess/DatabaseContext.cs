@@ -49,7 +49,7 @@ namespace Otus.Teaching.PromoCodeFactory.DataAccess
         /// <summary>
         /// Промокоды.
         /// </summary>
-        public DbSet<PromoCode> PromoCodes { get; set; }
+       // public DbSet<PromoCode> PromoCodes { get; set; }
 
         /// <summary>
         /// Роли.

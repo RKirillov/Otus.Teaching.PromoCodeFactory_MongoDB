@@ -1,8 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Otus.Teaching.PromoCodeFactory.DataAccess.Repositories;
 using Otus.Teaching.PromoCodeFactory.WebHost.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Otus.Teaching.PromoCodeFactory.WebHost.Controllers
 {
@@ -14,18 +19,54 @@ namespace Otus.Teaching.PromoCodeFactory.WebHost.Controllers
     public class CustomersController
         : ControllerBase
     {
-        [HttpGet]
-        public Task<ActionResult<CustomerShortResponse>> GetCustomersAsync()
+
+        private readonly ICustomerRepository _customerRepository;
+        private readonly IPromoCodeRepository _promoCodeRepository;
+
+        private readonly IMapper _mapper;
+        public CustomersController(ICustomerRepository customerRepository, IMapper mapper, IPromoCodeRepository promoCodeRepository)
         {
-            //TODO: Добавить получение списка клиентов
-            throw new NotImplementedException();
+            _customerRepository = customerRepository;
+            _mapper = mapper;
+            _promoCodeRepository = promoCodeRepository; 
+        }
+
+        [HttpGet]
+        public async Task<List<CustomerShortResponse>> GetCustomersAsync(CancellationToken cancellationToken)
+        {
+            var customers = await _customerRepository.GetAllAsync(cancellationToken);
+
+            var employeesModelList = customers.Select(x =>
+                new CustomerShortResponse()
+                {
+                    Id = x.Id,
+                    Email = x.Email,
+                    FirstName = x.FirstName,
+                    LastName = x.LastName,
+                }).ToList();
+
+            return employeesModelList;
         }
         
         [HttpGet("{id}")]
-        public Task<ActionResult<CustomerResponse>> GetCustomerAsync(Guid id)
+        public async Task<ActionResult<CustomerResponse>> GetCustomerByIdAsync(Guid id, CancellationToken cancellationToken)
         {
-            //TODO: Добавить получение клиента вместе с выданными ему промомкодами
-            throw new NotImplementedException();
+            var customer = (await _customerRepository.GetAsync(id, cancellationToken));
+            //var promocodes = (await _promoCodeRepository.GetAllAsync(cancellationToken)).Where(x => x.CustomerId == id);
+
+            if (customer == null)
+                return NotFound();
+
+            var customerModel = new CustomerResponse()
+            {
+                Id = customer.Id,
+                Email = customer.Email,
+                FirstName = customer.FirstName,
+                LastName = customer.LastName,
+                PromoCodes = customer.PromoCodes.ToList(),
+            };
+
+            return customerModel;
         }
         
         [HttpPost]

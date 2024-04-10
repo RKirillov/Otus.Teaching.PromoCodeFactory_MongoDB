@@ -55,6 +55,8 @@ namespace Otus.Teaching.PromoCodeFactory.WebHost
             });
 
             services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+            services.AddScoped<ICustomerRepository, CustomerRepository>();
+            services.AddScoped<IPromoCodeRepository, PromoCodeRepository>();
             /*            services.AddSwaggerGen(c =>
                         {
                             c.SwaggerDoc("v1", new OpenApiInfo { Title = "DataflowToUpper", Version = "v1" });
