@@ -19,13 +19,13 @@ namespace Otus.Teaching.PromoCodeFactory.Core.Domain.PromoCodeManagement
 
         public Guid PartnerManagerId { get; set; }//если удалить EF добавит сам, но без On Delete Cascade
 
-        public Employee PartnerManager { get; set; }
+        public virtual Employee PartnerManager { get; set; }
 
         public Guid CustomerId { get; set; } //можно удалить - EF все сделает сам, проверить потом.
 
-        public Customer Customer { get; set; }
+        public virtual Customer Customer { get; set; }
 
-        public Preference Preference { get; set; }
+        public virtual Preference Preference { get; set; }
         //TODO добавлен CustomerId Связь Customer и Promocode реализовать через One-To-Many
     }
 }

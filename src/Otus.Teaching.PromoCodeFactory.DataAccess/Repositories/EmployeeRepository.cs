@@ -26,11 +26,11 @@ namespace Otus.Teaching.PromoCodeFactory.DataAccess.Repositories
         /// TODO Deleted добавлять не стану
         public override async Task<Employee> GetAsync(Guid id, CancellationToken cancellationToken)
         {
-            var query = _context.Set<Employee>().AsQueryable();
+/*            var query = _context.Set<Employee>().AsQueryable();
             query = query
-                .Where(l => l.Id == id );//&& !l.Deleted
-
-            return await query.SingleOrDefaultAsync();
+                .Where(l => l.Id == id );//&& !l.Deleted*/
+            var entity = await _context.Set<Employee>().Include(x=>x.Role).FirstOrDefaultAsync(x => x.Id == id);
+            return  entity;
             //return await query.SingleOrDefaultAsync(cancellationToken);
         }
     }

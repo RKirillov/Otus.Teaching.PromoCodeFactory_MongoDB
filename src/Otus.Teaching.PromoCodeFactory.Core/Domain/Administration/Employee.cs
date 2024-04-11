@@ -16,9 +16,10 @@ namespace Otus.Teaching.PromoCodeFactory.Core.Domain.Administration
 
         public string Email { get; set; }
 
-        public Role Role { get; set; }
+        public Guid RoleId { get; set; }
+        public virtual Role Role { get; set; }
 
-        public ICollection<PromoCode> PromoCodes { get; set; }
+        public virtual ICollection<PromoCode> PromoCodes { get; set; }
 
         public int AppliedPromocodesCount { get; set; }
     }

@@ -10,8 +10,8 @@ namespace Otus.Teaching.PromoCodeFactory.Core.Domain.PromoCodeManagement
 
         public Guid PromoCodeId { get; set; }
         //добавил
-        public PromoCode PromoCode { get; set; }
+        public virtual PromoCode PromoCode { get; set; }
 
-        public IList<CustomerPreference> CustomerPreference { get; set; }
+        public virtual ICollection<CustomerPreference> CustomerPreference { get; set; }
     }
 }

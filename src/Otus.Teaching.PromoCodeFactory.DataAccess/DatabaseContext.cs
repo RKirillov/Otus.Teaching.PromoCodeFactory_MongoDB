@@ -54,7 +54,7 @@ namespace Otus.Teaching.PromoCodeFactory.DataAccess
         /// <summary>
         /// Роли.
         /// </summary>
-        //public DbSet<Role> Roles { get; set; }
+        public DbSet<Role> Roles { get; set; }
 
         /// <summary>
         /// Роли.
@@ -102,33 +102,35 @@ namespace Otus.Teaching.PromoCodeFactory.DataAccess
                 .WithOne(g => g.PromoCode)
                 .HasForeignKey<Preference>(s => s.PromoCodeId);
 
-            modelBuilder.Entity<Employee>()//
-                .HasOne<Role>(s => s.Role)
-                .WithOne(g => g.Employee)
-                .HasForeignKey<Role>(g => g.EmployeeId);
+            modelBuilder.Entity<Role>()//
+                .HasOne<Employee>(s => s.Employee)
+                .WithOne(g => g.Role)
+                .HasForeignKey<Employee>(g => g.RoleId);
 
-            modelBuilder.Entity<PromoCode>()//
-                .HasOne<Employee>(s => s.PartnerManager)
-                .WithMany(g => g.PromoCodes)
-                .HasForeignKey(s => s.PartnerManagerId);
+            /*            modelBuilder.Entity<PromoCode>()//
+                            .HasOne<Employee>(s => s.PartnerManager)
+                            .WithMany(g => g.PromoCodes)
+                            .HasForeignKey(s => s.PartnerManagerId);*/
 
             //modelBuilder.Entity<Customer>().Property(c => c.FirstName).HasMaxLength(100);
             //modelBuilder.Entity<Preference>().Property(c => c.Name).HasMaxLength(100);
 
             //Инициализация начальных данных
+
             modelBuilder.Entity<Role>().HasData(FakeDataFactory.Roles);
             modelBuilder.Entity<Employee>().HasData(FakeDataFactory.Employees);
-            modelBuilder.Entity<CustomerPreference>().HasData(FakeDataFactory.CustomerPreferences);
-            modelBuilder.Entity<Preference>().HasData(FakeDataFactory.Preferences);
-            modelBuilder.Entity<Customer>().HasData(FakeDataFactory.Customers);
-            modelBuilder.Entity<PromoCode>().HasData(FakeDataFactory.PromoCodes);
-
+            /*            modelBuilder.Entity<CustomerPreference>().HasData(FakeDataFactory.CustomerPreferences);
+                        modelBuilder.Entity<Preference>().HasData(FakeDataFactory.Preferences);
+                        modelBuilder.Entity<Customer>().HasData(FakeDataFactory.Customers);
+                        modelBuilder.Entity<PromoCode>().HasData(FakeDataFactory.PromoCodes);
+            */
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
 
             optionsBuilder.UseSqlite(_connectionOptions.ConnectionString);
+            optionsBuilder.UseSnakeCaseNamingConvention();
             optionsBuilder.LogTo(Console.WriteLine, LogLevel.Information);
         }
 

@@ -16,7 +16,8 @@ namespace Otus.Teaching.PromoCodeFactory.DataAccess.Data
                 Email = "owner@somemail.ru",
                 FirstName = "Иван",
                 LastName = "Сергеев",
-                //Role = Roles.FirstOrDefault(x => x.Name == "Admin"),
+                RoleId = Guid.Parse("53729686-a368-4eeb-8bfa-cc69b6050d02"),// только для HasData
+                //Role = Roles.FirstOrDefault(x => x.Name == "Admin"),// только для AddRange
                 AppliedPromocodesCount = 5
             },
             new Employee()
@@ -25,7 +26,8 @@ namespace Otus.Teaching.PromoCodeFactory.DataAccess.Data
                 Email = "andreev@somemail.ru",
                 FirstName = "Петр",
                 LastName = "Андреев",
-                //Role = Roles.FirstOrDefault(x => x.Name == "PartnerManager"),
+                RoleId = Guid.Parse("b0ae7aac-5493-45cd-ad16-87426a5e7665"),// только для HasData
+                //Role = Roles.FirstOrDefault(x => x.Name == "PartnerManager"),// только для AddRange
                 AppliedPromocodesCount = 10
             },
         };
@@ -37,14 +39,14 @@ namespace Otus.Teaching.PromoCodeFactory.DataAccess.Data
                 Id = Guid.Parse("53729686-a368-4eeb-8bfa-cc69b6050d02"),
                 Name = "Admin",
                 Description = "Администратор",
-                EmployeeId=Employees.FirstOrDefault(x => x.FirstName == "Иван").Id
+                //Employee=Employees.FirstOrDefault(x => x.FirstName == "Иван").Id
             },
             new Role()
             {
                 Id = Guid.Parse("b0ae7aac-5493-45cd-ad16-87426a5e7665"),
                 Name = "PartnerManager",
                 Description = "Партнерский менеджер",
-                EmployeeId=Employees.FirstOrDefault(x => x.FirstName == "Петр").Id
+                //EmployeeId=Employees.FirstOrDefault(x => x.FirstName == "Петр").Id
                 //TODO добавил EmployeeId
             }
         };
@@ -95,7 +97,7 @@ namespace Otus.Teaching.PromoCodeFactory.DataAccess.Data
                         FirstName = "Иван",
                         LastName = "Петров",
                         //CustomerPreference=new List<CustomerPreference>(),
-                        //PromoCodes=new List<PromoCode> ()
+                        //PromoCodes=PromoCodes
                         //TODO: Добавить предзаполненный список предпочтений Done
                     }
                 };
