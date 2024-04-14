@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Otus.Teaching.PromoCodeFactory.Core.Domain.Administration;
 using Otus.Teaching.PromoCodeFactory.Core.Domain.PromoCodeManagement;
 using Otus.Teaching.PromoCodeFactory.Core.Options;
@@ -26,9 +27,10 @@ namespace Otus.Teaching.PromoCodeFactory.DataAccess
         public DatabaseContext(DbContextOptions<DatabaseContext> options, ConnectionOptions connectionOptions) : base(options)
         {
             _connectionOptions = connectionOptions;
-            Database.EnsureDeleted();
-            Database.EnsureCreated();
+            //Database.EnsureDeleted();
+            //Database.EnsureCreated();
         }
+
         //TODO не все нужно объявлять в DBSet, стр 446
         /// <summary>
         /// Клиенты.
@@ -69,27 +71,27 @@ namespace Otus.Teaching.PromoCodeFactory.DataAccess
             //TODO ???
             base.OnModelCreating(modelBuilder);
             //ошибка
-/*            foreach (var entityType in modelBuilder.Model.GetEntityTypes())
-            {
-                foreach (var propertyInfo in entityType.ClrType.GetProperties())
-                {
-                    if (propertyInfo.PropertyType == typeof(string))
-                    {
-                        entityType.GetProperty(propertyInfo.Name)
-                            .SetMaxLength(1000);
-                    }
-                }
-            }*/
+            /*            foreach (var entityType in modelBuilder.Model.GetEntityTypes())
+                        {
+                            foreach (var propertyInfo in entityType.ClrType.GetProperties())
+                            {
+                                if (propertyInfo.PropertyType == typeof(string))
+                                {
+                                    entityType.GetProperty(propertyInfo.Name)
+                                        .SetMaxLength(1000);
+                                }
+                            }
+                        }*/
             modelBuilder.Entity<CustomerPreference>().HasKey(sc => new { sc.CustomerId, sc.PreferenceId });//
 
             modelBuilder.Entity<CustomerPreference>()//
                 .HasOne<Customer>(sc => sc.Customer)
-                .WithMany(s => s.CustomerPreference)
+                .WithMany(s => s.Preferences)
                 .HasForeignKey(sc => sc.CustomerId);
 
             modelBuilder.Entity<CustomerPreference>()//
                 .HasOne<Preference>(sc => sc.Preference)
-                .WithMany(s => s.CustomerPreference)
+                .WithMany() //s => s.CustomerPreference
                 .HasForeignKey(sc => sc.PreferenceId);
 
             modelBuilder.Entity<PromoCode>()//
@@ -97,14 +99,14 @@ namespace Otus.Teaching.PromoCodeFactory.DataAccess
                 .WithMany(g => g.PromoCodes)
                 .HasForeignKey(s => s.CustomerId);
 
-                 modelBuilder.Entity<PromoCode>()//
-                .HasOne<Preference>(s => s.Preference)
-                .WithOne(g => g.PromoCode)
-                .HasForeignKey<Preference>(s => s.PromoCodeId);
+            modelBuilder.Entity<PromoCode>()//можно не указывать
+           .HasOne<Preference>(s => s.Preference)
+           .WithOne()
+           .HasForeignKey<PromoCode>(s => s.PreferenceId);
 
-            modelBuilder.Entity<Role>()//
-                .HasOne<Employee>(s => s.Employee)
-                .WithOne(g => g.Role)
+            modelBuilder.Entity<Employee>()//можно не указывать
+                .HasOne<Role>(s => s.Role)
+                .WithOne()
                 .HasForeignKey<Employee>(g => g.RoleId);
 
             /*            modelBuilder.Entity<PromoCode>()//
@@ -119,11 +121,12 @@ namespace Otus.Teaching.PromoCodeFactory.DataAccess
 
             modelBuilder.Entity<Role>().HasData(FakeDataFactory.Roles);
             modelBuilder.Entity<Employee>().HasData(FakeDataFactory.Employees);
-            /*            modelBuilder.Entity<CustomerPreference>().HasData(FakeDataFactory.CustomerPreferences);
-                        modelBuilder.Entity<Preference>().HasData(FakeDataFactory.Preferences);
-                        modelBuilder.Entity<Customer>().HasData(FakeDataFactory.Customers);
-                        modelBuilder.Entity<PromoCode>().HasData(FakeDataFactory.PromoCodes);
-            */
+            modelBuilder.Entity<Customer>().HasData(FakeDataFactory.Customers);//не указывать тут  CustomerPreferences для HasData
+            modelBuilder.Entity<CustomerPreference>().HasData(FakeDataFactory.CustomerPreferences);
+            modelBuilder.Entity<Preference>().HasData(FakeDataFactory.Preferences);
+
+            modelBuilder.Entity<PromoCode>().HasData(FakeDataFactory.PromoCodes);
+
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

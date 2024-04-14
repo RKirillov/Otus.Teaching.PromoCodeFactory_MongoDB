@@ -8,8 +8,7 @@ namespace Otus.Teaching.PromoCodeFactory.Core.Domain.Administration
         public string Name { get; set; }
 
         //добавил
-        //public Guid EmployeeId { get; set; }
-        public virtual Employee Employee { get; set; }
+        //public virtual Employee Employee { get; set; }//можно не указывать
         public string Description { get; set; }
     }
 }

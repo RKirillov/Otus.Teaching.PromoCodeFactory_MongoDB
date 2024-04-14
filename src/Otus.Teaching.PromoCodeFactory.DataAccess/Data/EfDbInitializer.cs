@@ -16,16 +16,16 @@ namespace Otus.Teaching.PromoCodeFactory.DataAccess.Data
         {
             _dataContext.Database.EnsureDeleted();
             _dataContext.Database.EnsureCreated();
-            
-            _dataContext.AddRange(FakeDataFactory.Employees);
-            _dataContext.SaveChanges();
-            
-            //_dataContext.AddRange(FakeDataFactory.Preferences);
+
+            //_dataContext.AddRange(FakeDataFactory.Employees);
             //_dataContext.SaveChanges();
-            
-            _dataContext.AddRange(FakeDataFactory.Customers);
+
+/*            _dataContext.AddRange(FakeDataFactory.Preferences);
             _dataContext.SaveChanges();
-           
+
+            _dataContext.AddRange(FakeDataFactory.Customers);//необходимо указывать CustomerPreference в отличии от HasData
+            _dataContext.SaveChanges();*/
+
         }
     }
 }

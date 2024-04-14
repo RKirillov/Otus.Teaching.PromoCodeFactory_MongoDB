@@ -57,6 +57,7 @@ namespace Otus.Teaching.PromoCodeFactory.WebHost
             {
                 opt.EnableSensitiveDataLogging();
                 opt.UseLazyLoadingProxies();
+                opt.EnableDetailedErrors();
             });
 
             services.AddScoped<IEmployeeRepository, EmployeeRepository>();
@@ -97,7 +98,7 @@ namespace Otus.Teaching.PromoCodeFactory.WebHost
             {
                 endpoints.MapControllers();
             });
-            //dbInitializer.InitializeDb();
+            dbInitializer.InitializeDb();
         }
     }
     /// <summary>

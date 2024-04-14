@@ -25,6 +25,8 @@ namespace Otus.Teaching.PromoCodeFactory.Core.Domain.PromoCodeManagement
 
         public virtual Customer Customer { get; set; }
 
+        public virtual Guid PreferenceId { get; set; }
+
         public virtual Preference Preference { get; set; }
         //TODO добавлен CustomerId Связь Customer и Promocode реализовать через One-To-Many
     }

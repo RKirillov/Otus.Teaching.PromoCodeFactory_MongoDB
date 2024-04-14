@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using FluentAssertions.Equivalency;
 using Otus.Teaching.PromoCodeFactory.Core.Domain.Administration;
 using Otus.Teaching.PromoCodeFactory.Core.Domain.PromoCodeManagement;
 
@@ -60,21 +61,21 @@ namespace Otus.Teaching.PromoCodeFactory.DataAccess.Data
                     new Preference()
                 {
                         Id = Guid.Parse("ef7f299f-92d7-459f-896e-078ed53ef99c"),
-                        PromoCodeId = Guid.Parse("2d5c0b24-0f61-4ae3-ad2a-e0ded5153d09"),
+                        //PromoCodeId = Guid.Parse("2d5c0b24-0f61-4ae3-ad2a-e0ded5153d09"),
                         Name = "Театр",
                         //CustomerPreference=new List <CustomerPreference>(),
                     },
                     new Preference()
                 {
                         Id = Guid.Parse("c4bda62e-fc74-4256-a956-4760b3858cbd"),
-                        PromoCodeId = Guid.Parse("33867eef-321b-4b88-a4e6-e57f77e3e57a"),
+                        //PromoCodeId = Guid.Parse("33867eef-321b-4b88-a4e6-e57f77e3e57a"),
                         Name = "Семья",
                         //CustomerPreference=new List<CustomerPreference>(),
                     },
                     new Preference()
                 {
                         Id = Guid.Parse("76324c47-68d2-472d-abb8-33cfa8cc0c84"),
-                        PromoCodeId = Guid.Parse("fd49d9a9-609f-4376-bfb4-14b157aae3a9"),
+                        //PromoCodeId = Guid.Parse("fd49d9a9-609f-4376-bfb4-14b157aae3a9"),
                         Name = "Дети",
                         //CustomerPreference=new List < CustomerPreference >(),
                     }
@@ -96,9 +97,19 @@ namespace Otus.Teaching.PromoCodeFactory.DataAccess.Data
                         Email = "ivan_sergeev@mail.ru",
                         FirstName = "Иван",
                         LastName = "Петров",
-                        //CustomerPreference=new List<CustomerPreference>(),
-                        //PromoCodes=PromoCodes
-                        //TODO: Добавить предзаполненный список предпочтений Done
+/*                        Preferences = new List<CustomerPreference>() 
+                        {
+                            new CustomerPreference()
+                            {
+                                CustomerId = customerId,
+                                PreferenceId = Guid.Parse("76324c47-68d2-472d-abb8-33cfa8cc0c84")
+                            },
+                            new CustomerPreference()
+                            {
+                                CustomerId = customerId,
+                                PreferenceId = Guid.Parse("ef7f299f-92d7-459f-896e-078ed53ef99c")
+                            }
+                        }*/
                     }
                 };
                 return customers;
@@ -131,28 +142,33 @@ namespace Otus.Teaching.PromoCodeFactory.DataAccess.Data
                     new PromoCode()
                     {
                         Id = Guid.Parse("2d5c0b24-0f61-4ae3-ad2a-e0ded5153d09"),
+                        Code = "OSEN2024",
                         ServiceInfo = "Сервисная информация1",
                         BeginDate = DateTime.Now,
                         EndDate = DateTime.Now.AddDays(1),
                         PartnerName="Рога и Копыта",
                         CustomerId = Guid.Parse("a6c8c6b1-4349-45b0-ab31-244740aaf0f0"),
                         PartnerManagerId=Guid.Parse("451533d5-d8d5-4a11-9c7b-eb9f14e1a32f"),
+                        PreferenceId = Guid.Parse("ef7f299f-92d7-459f-896e-078ed53ef99c"),
                         //TODO: 
                     },
                     new PromoCode()
                     {
                         Id = Guid.Parse("33867eef-321b-4b88-a4e6-e57f77e3e57a"),
+                        Code = "LETO2024",
                         ServiceInfo = "Сервисная информация2",
                         BeginDate = DateTime.Now.AddDays(-1),
                         EndDate = DateTime.Now.AddDays(2),
                         PartnerName="Домик в Деревне",
                         CustomerId = Guid.Parse("a6c8c6b1-4349-45b0-ab31-244740aaf0f0"),
                         PartnerManagerId=Guid.Parse("451533d5-d8d5-4a11-9c7b-eb9f14e1a32f"),
+                        PreferenceId = Guid.Parse("c4bda62e-fc74-4256-a956-4760b3858cbd"),
                         //TODO: 
                     },
                     new PromoCode()
                     {
                         Id = Guid.Parse("fd49d9a9-609f-4376-bfb4-14b157aae3a9"),
+                        Code = "ZIMA2024",
                         ServiceInfo = "Сервисная информация3",
                         BeginDate = DateTime.Now.AddDays(-3),
                         EndDate = DateTime.Now.AddDays(4),
