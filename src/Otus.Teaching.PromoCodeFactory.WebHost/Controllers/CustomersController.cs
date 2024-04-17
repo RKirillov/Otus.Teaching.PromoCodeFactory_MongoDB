@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Otus.Teaching.PromoCodeFactory.DataAccess.Repositories;
 using Otus.Teaching.PromoCodeFactory.WebHost.Models;
 using Microsoft.EntityFrameworkCore;
+using Otus.Teaching.PromoCodeFactory.Core.Domain.PromoCodeManagement;
 
 namespace Otus.Teaching.PromoCodeFactory.WebHost.Controllers
 {
@@ -21,14 +22,14 @@ namespace Otus.Teaching.PromoCodeFactory.WebHost.Controllers
     {
 
         private readonly ICustomerRepository _customerRepository;
-        private readonly IPromoCodeRepository _promoCodeRepository;
+        private readonly IPreferenceRepository _preferenceRepository;
 
         private readonly IMapper _mapper;
-        public CustomersController(ICustomerRepository customerRepository, IMapper mapper, IPromoCodeRepository promoCodeRepository)
+        public CustomersController(ICustomerRepository customerRepository, IMapper mapper, IPreferenceRepository preferenceRepository)
         {
             _customerRepository = customerRepository;
             _mapper = mapper;
-            _promoCodeRepository = promoCodeRepository; 
+            _preferenceRepository = preferenceRepository;
         }
 
         [HttpGet]
@@ -52,7 +53,6 @@ namespace Otus.Teaching.PromoCodeFactory.WebHost.Controllers
         public async Task<ActionResult<CustomerResponse>> GetCustomerByIdAsync(Guid id, CancellationToken cancellationToken)
         {
             var customer = (await _customerRepository.GetAsync(id, cancellationToken));
-            //var promocodes = (await _promoCodeRepository.GetAllAsync(cancellationToken)).Where(x => x.CustomerId == id);
 
             if (customer == null)
                 return NotFound();
@@ -70,10 +70,25 @@ namespace Otus.Teaching.PromoCodeFactory.WebHost.Controllers
         }
         
         [HttpPost]
-        public Task<IActionResult> CreateCustomerAsync(CreateOrEditCustomerRequest request)
+        public async Task<IActionResult> CreateCustomerAsync(CreateOrEditCustomerRequest request, CancellationToken cancellationToken)
         {
             //TODO: Добавить создание нового клиента вместе с его предпочтениями
-            throw new NotImplementedException();
+            var preferences = await _preferenceRepository.GetRangeAsync(request.PreferenceIds, cancellationToken);
+            //var promocodes = await _preferenceRepository.GetRangeAsync(request.PreferenceIds, cancellationToken);
+            var customer = new Customer()
+            {
+                Email = request.Email,
+                FirstName = request.FirstName,
+                LastName = request.LastName,
+            };
+            customer.Preferences = preferences.Select(x => new CustomerPreference()
+            {
+                Customer = customer,
+                Preference = x
+            }).ToList();
+            //TODO подключать ли промокоды?
+            await _customerRepository.AddAsync(customer);
+            return CreatedAtAction(nameof(GetCustomerByIdAsync), new { id = customer.Id }, null);
         }
         
         [HttpPut("{id}")]

@@ -9,7 +9,7 @@ using Otus.Teaching.PromoCodeFactory.Core.Domain.PromoCodeManagement;
 namespace Otus.Teaching.PromoCodeFactory.DataAccess.Repositories
 {
     /// <summary>
-    /// Репозиторий дя работы с сущностями сотрудников и их ролей
+    /// Репозиторий дя работы с сущностями клиентов и их предпочтений
     /// </summary>
     public class CustomerRepository : Repository<Customer, Guid>, ICustomerRepository
     {

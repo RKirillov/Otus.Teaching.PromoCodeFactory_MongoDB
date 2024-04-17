@@ -31,17 +31,17 @@ namespace Otus.Teaching.PromoCodeFactory.WebHost
         {
             var executedAssembly = Assembly.GetExecutingAssembly();
             var config = new MapperConfiguration(cfg => cfg.AddMaps(executedAssembly));
-                        
+
             services.AddControllers();
             services.AddSingleton(_ => config.CreateMapper());
-            services.AddSingleton(typeof(IRepository<Employee>), (x) =>
-                new InMemoryRepository<Employee>(FakeDataFactory.Employees));
-            services.AddSingleton(typeof(IRepository<Role>), (x) =>
-                new InMemoryRepository<Role>(FakeDataFactory.Roles));
-            services.AddSingleton(typeof(IRepository<Preference>), (x) =>
-                new InMemoryRepository<Preference>(FakeDataFactory.Preferences));
-            services.AddSingleton(typeof(IRepository<Customer>), (x) =>
-                new InMemoryRepository<Customer>(FakeDataFactory.Customers));
+            /*            services.AddSingleton(typeof(IRepository<Employee>), (x) =>
+                            new InMemoryRepository<Employee>(FakeDataFactory.Employees));
+                        services.AddSingleton(typeof(IRepository<Role>), (x) =>
+                            new InMemoryRepository<Role>(FakeDataFactory.Roles));
+                        services.AddSingleton(typeof(IRepository<Preference>), (x) =>
+                            new InMemoryRepository<Preference>(FakeDataFactory.Preferences));
+                        services.AddSingleton(typeof(IRepository<Customer>), (x) =>
+                            new InMemoryRepository<Customer>(FakeDataFactory.Customers));*/
             services.AddScoped<IDbInitializer, EfDbInitializer>();
             //services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
             //NSwag - как добавить xml?
@@ -62,6 +62,7 @@ namespace Otus.Teaching.PromoCodeFactory.WebHost
 
             services.AddScoped<IEmployeeRepository, EmployeeRepository>();
             services.AddScoped<ICustomerRepository, CustomerRepository>();
+            services.AddScoped<IPreferenceRepository, PreferenceRepository>();
             services.AddScoped<IPromoCodeRepository, PromoCodeRepository>();
 
             /*            services.AddSwaggerGen(c =>

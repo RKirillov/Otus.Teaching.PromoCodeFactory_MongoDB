@@ -58,7 +58,6 @@ namespace Otus.Teaching.PromoCodeFactory.DataAccess.Repositories
         /// </summary>
         /// <param name="asNoTracking"> Вызвать с AsNoTracking. </param>
         /// <returns> IQueryable массив сущностей. </returns>
-        /// TODO Зачему тут IQueryable?
         public virtual IQueryable<T> GetAll(bool asNoTracking = false)
         {
             return asNoTracking ? _entitySet.AsNoTracking() : _entitySet;
@@ -81,10 +80,19 @@ namespace Otus.Teaching.PromoCodeFactory.DataAccess.Repositories
         /// Добавить в базу массив сущностей.
         /// </summary>
         /// <param name="entities"> Массив сущностей. </param>
-        public virtual void AddRange(List<T> entities)
+        public virtual async Task AddRangeAsync(List<T> entities)
         {
             var enumerable = entities as IList<T> ?? entities.ToList();
-            _entitySet.AddRange(enumerable);
+            await  _entitySet.AddRangeAsync(enumerable);
+        }
+
+        /// <summary>
+        /// Добавить в базу сущность.
+        /// </summary>
+        /// <param name="entity"> Сущность. </param>
+        public virtual async Task AddAsync(T entity)
+        {
+            await _entitySet.AddAsync(entity);
         }
         #endregion
 

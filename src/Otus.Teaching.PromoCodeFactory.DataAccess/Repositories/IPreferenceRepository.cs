@@ -2,12 +2,14 @@
 using Otus.Teaching.PromoCodeFactory.Core.Domain.Administration;
 using Otus.Teaching.PromoCodeFactory.Core.Domain.PromoCodeManagement;
 using System;
+using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Otus.Teaching.PromoCodeFactory.DataAccess.Repositories
 {
-    public interface ICustomerRepository : IRepository<Customer, Guid>
+    public interface IPreferenceRepository : IRepository<Preference, Guid>
     {
-        Task AddAsync(Customer entity);
+        Task<IEnumerable<Preference>> GetRangeAsync(List<Guid> listIds, CancellationToken cancellationToken);
     }
 }
