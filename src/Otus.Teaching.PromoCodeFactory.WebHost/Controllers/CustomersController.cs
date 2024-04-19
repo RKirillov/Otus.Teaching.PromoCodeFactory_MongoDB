@@ -88,7 +88,6 @@ namespace Otus.Teaching.PromoCodeFactory.WebHost.Controllers
             //var promocodes = await _preferenceRepository.GetRangeAsync(request.PreferenceIds, cancellationToken);
             var customer = new Customer()
             {
-                //Id=Guid.NewGuid(),
                 Email = request.Email,
                 FirstName = request.FirstName,
                 LastName = request.LastName,
