@@ -28,7 +28,7 @@ namespace Otus.Teaching.PromoCodeFactory.WebHost.Mapping
                 .ReverseMap()
                 // BookViewModel -> Book
                 ;
-
+            CreateMap<Preference, PreferenceResponse>();
         }
     }
 }
