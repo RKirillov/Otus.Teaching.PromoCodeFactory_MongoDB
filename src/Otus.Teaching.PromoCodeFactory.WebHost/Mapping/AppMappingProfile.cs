@@ -17,7 +17,6 @@ namespace Otus.Teaching.PromoCodeFactory.WebHost.Mapping
         {
             //CustomerPreference
             CreateMap<Customer, CustomerResponse>()
-                // Book -> BookViewModel
                 .ForMember(dest => dest.PreferencesResponse, opt => opt.MapFrom(src => src.Preferences
                     .Select(src => src.Preference)))
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
@@ -26,9 +25,16 @@ namespace Otus.Teaching.PromoCodeFactory.WebHost.Mapping
                 .ForMember(dest => dest.LastName, opt => opt.MapFrom(src => src.LastName))
                 .ForMember(dest => dest.PromoCodesShotResponse, opt => opt.MapFrom(src => src.PromoCodes))
                 .ReverseMap()
-                // BookViewModel -> Book
                 ;
-            CreateMap<Preference, PreferenceResponse>();
+            CreateMap<Preference, PreferenceResponse>()
+                ;
+            CreateMap<GivePromoCodeRequest, PromoCode>()
+                .ForMember(dest => dest.ServiceInfo, opt => opt.MapFrom(src => src.ServiceInfo))
+                .ForMember(dest => dest.Code, opt => opt.MapFrom(src => src.PromoCode))
+                .ForMember(dest => dest.PartnerName, opt => opt.MapFrom(src => src.PartnerName))
+                .ForSourceMember(dest => dest.PreferenceName, opt => opt.DoNotValidate())
+                .ReverseMap()
+                ;
         }
     }
 }

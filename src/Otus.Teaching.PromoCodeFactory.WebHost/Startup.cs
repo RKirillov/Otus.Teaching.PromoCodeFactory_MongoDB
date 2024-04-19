@@ -6,10 +6,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Options;
-using Otus.Teaching.PromoCodeFactory.Core.Abstractions.Repositories;
-using Otus.Teaching.PromoCodeFactory.Core.Domain.Administration;
-using Otus.Teaching.PromoCodeFactory.Core.Domain.PromoCodeManagement;
 using Otus.Teaching.PromoCodeFactory.Core.Options;
 using Otus.Teaching.PromoCodeFactory.DataAccess;
 using Otus.Teaching.PromoCodeFactory.DataAccess.Data;
@@ -35,14 +31,6 @@ namespace Otus.Teaching.PromoCodeFactory.WebHost
 
             services.AddControllers();
             services.AddSingleton(_ => config.CreateMapper());
-            /*            services.AddSingleton(typeof(IRepository<Employee>), (x) =>
-                            new InMemoryRepository<Employee>(FakeDataFactory.Employees));
-                        services.AddSingleton(typeof(IRepository<Role>), (x) =>
-                            new InMemoryRepository<Role>(FakeDataFactory.Roles));
-                        services.AddSingleton(typeof(IRepository<Preference>), (x) =>
-                            new InMemoryRepository<Preference>(FakeDataFactory.Preferences));
-                        services.AddSingleton(typeof(IRepository<Customer>), (x) =>
-                            new InMemoryRepository<Customer>(FakeDataFactory.Customers));*/
             services.AddScoped<IDbInitializer, EfDbInitializer>();
             //services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
             //NSwag - как добавить xml?

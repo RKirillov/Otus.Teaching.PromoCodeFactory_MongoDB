@@ -14,9 +14,9 @@ namespace Otus.Teaching.PromoCodeFactory.WebHost.Models
 
         public string ServiceInfo { get; set; }
 
-        public string BeginDate { get; set; }
+        public string? BeginDate { get; set; }
 
-        public string EndDate { get; set; }
+        public string? EndDate { get; set; }
 
         public string PartnerName { get; set; }
     }

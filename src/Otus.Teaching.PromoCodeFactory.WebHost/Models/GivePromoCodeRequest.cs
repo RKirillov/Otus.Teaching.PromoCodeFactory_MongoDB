@@ -8,6 +8,6 @@
 
         public string PromoCode { get; set; }
 
-        public string Preference { get; set; }
+        public string PreferenceName { get; set; }
     }
 }

@@ -7,6 +7,12 @@ namespace Otus.Teaching.PromoCodeFactory.DataAccess.Repositories
 {
     public interface IPromoCodeRepository : IRepository<PromoCode, Guid>
     {
-        //Task<int> DeleteByCustomerIdAsync(Guid id, CancellationToken cancellationToken = default);
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        Task AddAsync(PromoCode entity, CancellationToken cancellationToken);
     }
 }
