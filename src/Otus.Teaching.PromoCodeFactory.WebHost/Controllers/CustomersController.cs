@@ -9,6 +9,7 @@ using Otus.Teaching.PromoCodeFactory.DataAccess.Repositories;
 using Otus.Teaching.PromoCodeFactory.WebHost.Models;
 using Microsoft.EntityFrameworkCore;
 using Otus.Teaching.PromoCodeFactory.Core.Domain.PromoCodeManagement;
+using Otus.Teaching.PromoCodeFactory.Core.Domain.Administration;
 
 namespace Otus.Teaching.PromoCodeFactory.WebHost.Controllers
 {
@@ -23,13 +24,19 @@ namespace Otus.Teaching.PromoCodeFactory.WebHost.Controllers
 
         private readonly ICustomerRepository _customerRepository;
         private readonly IPreferenceRepository _preferenceRepository;
+        //private readonly IPromoCodeRepository _promoCodeRepository;
 
         private readonly IMapper _mapper;
-        public CustomersController(ICustomerRepository customerRepository, IMapper mapper, IPreferenceRepository preferenceRepository)
+        public CustomersController(ICustomerRepository customerRepository,
+            IMapper mapper,
+            IPreferenceRepository preferenceRepository
+            //IPromoCodeRepository promoCodeRepository
+            )
         {
             _customerRepository = customerRepository;
             _mapper = mapper;
             _preferenceRepository = preferenceRepository;
+            //_promoCodeRepository = promoCodeRepository;
         }
 
         [HttpGet]
@@ -48,7 +55,7 @@ namespace Otus.Teaching.PromoCodeFactory.WebHost.Controllers
 
             return employeesModelList;
         }
-        
+
         [HttpGet("{id}")]
         public async Task<ActionResult<CustomerResponse>> GetCustomerByIdAsync(Guid id, CancellationToken cancellationToken)
         {
@@ -57,18 +64,22 @@ namespace Otus.Teaching.PromoCodeFactory.WebHost.Controllers
             if (customer == null)
                 return NotFound();
 
-            var customerModel = new CustomerResponse()
-            {
-                Id = customer.Id,
-                Email = customer.Email,
-                FirstName = customer.FirstName,
-                LastName = customer.LastName,
-                PromoCodes = customer.PromoCodes.ToList(),
-            };
+            //var promoCodesShortsList = _mapper.Map<List<PromoCodeShortResponse>>(customer.PromoCodes);
+            /*            var preferencesShortsList = _mapper.Map<List<PreferenceResponse>>(customer.Preferences);
+                        var customerModel = new CustomerResponse()
+                        {
+                            Id = customer.Id,
+                            Email = customer.Email,
+                            FirstName = customer.FirstName,
+                            LastName = customer.LastName,
+                            PromoCodesResponse = promoCodesShortsList,
+                            PreferencesResponse = preferencesShortsList
+                        };*/
+            var customerModel = _mapper.Map<CustomerResponse>(customer);
 
             return customerModel;
         }
-        
+
         [HttpPost]
         public async Task<IActionResult> CreateCustomerAsync(CreateOrEditCustomerRequest request, CancellationToken cancellationToken)
         {
@@ -92,7 +103,7 @@ namespace Otus.Teaching.PromoCodeFactory.WebHost.Controllers
             await _customerRepository.SaveChangesAsync(cancellationToken);
             return CreatedAtAction(nameof(GetCustomerByIdAsync), new { id = customer.Id }, null);
         }
-        
+
         [HttpPut("{id}")]
         public async Task<IActionResult> EditCustomersAsync(Guid id, CreateOrEditCustomerRequest request, CancellationToken cancellationToken)
         {
@@ -119,12 +130,17 @@ namespace Otus.Teaching.PromoCodeFactory.WebHost.Controllers
 
             return NoContent();
         }
-        
+
         [HttpDelete]
-        public Task<IActionResult> DeleteCustomer(Guid id)
+        public async Task<IActionResult> DeleteCustomer(Guid id, CancellationToken cancellationToken)
         {
             //TODO: Удаление клиента вместе с выданными ему промокодами
-            throw new NotImplementedException();
+            //By convention, required relationships are configured to cascade delete; this means that when the principal
+            //is deleted, all of its dependents are deleted as well,
+            if (await _customerRepository.DeleteByIdAsync(id, cancellationToken) == 0)
+                return NotFound();
+            await _customerRepository.SaveChangesAsync();
+            return NoContent();
         }
     }
 }

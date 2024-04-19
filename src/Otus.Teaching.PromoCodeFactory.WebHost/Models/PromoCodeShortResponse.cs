@@ -1,9 +1,11 @@
 ﻿using System;
+using AutoMapper;
 using Otus.Teaching.PromoCodeFactory.Core.Domain.Administration;
 using Otus.Teaching.PromoCodeFactory.Core.Domain.PromoCodeManagement;
 
 namespace Otus.Teaching.PromoCodeFactory.WebHost.Models
 {
+    [AutoMap(typeof(PromoCode), ReverseMap = true)]
     public class PromoCodeShortResponse
     {
         public Guid Id { get; set; }

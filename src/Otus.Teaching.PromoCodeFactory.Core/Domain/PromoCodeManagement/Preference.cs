@@ -12,6 +12,6 @@ namespace Otus.Teaching.PromoCodeFactory.Core.Domain.PromoCodeManagement
         //добавил
         //public virtual PromoCode PromoCode { get; set; }
 
-        //public virtual ICollection<CustomerPreference> CustomerPreference { get; set; }
+        //public virtual ICollection<CustomerPreference> Customers { get; set; }//можно не указывать
     }
 }

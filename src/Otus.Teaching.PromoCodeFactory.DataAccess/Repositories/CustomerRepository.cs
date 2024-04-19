@@ -52,11 +52,13 @@ namespace Otus.Teaching.PromoCodeFactory.DataAccess.Repositories
         }
         #endregion
 
-        #region Remove
-        public void Remove(Customer entity)
+        #region DeleteAsync
+        public async Task<int> DeleteByIdAsync(Guid id, CancellationToken cancellationToken = default)
         {
             //TODO check
-            _context.Set<Customer>().Remove(entity);
+            //            var preferences = _context.Set<Preference>().AsQueryable().Where(t => listIds.Contains(t.Id));
+            return await _context.Set<Customer>().Where(u => u.Id == id)
+                .ExecuteDeleteAsync(cancellationToken);
         }
         #endregion
     }

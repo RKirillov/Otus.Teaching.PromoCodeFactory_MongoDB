@@ -8,6 +8,7 @@ namespace Otus.Teaching.PromoCodeFactory.DataAccess.Repositories
 {
     public interface IRepository<T, TPrimaryKey> where T : BaseEntity
     {
+        void Delete(T entity);
         T Get(TPrimaryKey id);
         IQueryable<T> GetAll(bool asNoTracking = false);
         Task<List<T>> GetAllAsync(CancellationToken cancellationToken, bool asNoTracking = false);

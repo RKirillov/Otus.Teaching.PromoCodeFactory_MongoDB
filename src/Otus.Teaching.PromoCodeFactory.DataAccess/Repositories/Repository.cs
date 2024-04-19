@@ -96,6 +96,13 @@ namespace Otus.Teaching.PromoCodeFactory.DataAccess.Repositories
         }
         #endregion
 
+        #region Delete
+        public virtual void Delete(T entity)
+        {
+             _entitySet.Remove(entity);
+        }
+        #endregion
+
         #region SaveChanges
         /// <summary>
         /// Сохранить изменения.

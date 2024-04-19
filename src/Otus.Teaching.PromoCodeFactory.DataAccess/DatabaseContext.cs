@@ -94,11 +94,17 @@ namespace Otus.Teaching.PromoCodeFactory.DataAccess
                 .WithMany() //s => s.CustomerPreference
                 .HasForeignKey(sc => sc.PreferenceId);
 
-            modelBuilder.Entity<PromoCode>()//
+/*            modelBuilder.Entity<PromoCode>()//одно и тоже с нижним
                 .HasOne<Customer>(s => s.Customer)
                 .WithMany(g => g.PromoCodes)
-                //.OnDelete(DeleteBehavior.Cascade)
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasForeignKey(s => s.CustomerId);*/
+            modelBuilder.Entity<Customer>()//
+                .HasMany<PromoCode>(s => s.PromoCodes)
+                .WithOne(g => g.Customer)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasForeignKey(s => s.CustomerId);
+
 
             modelBuilder.Entity<PromoCode>()//можно не указывать
            .HasOne<Preference>(s => s.Preference)

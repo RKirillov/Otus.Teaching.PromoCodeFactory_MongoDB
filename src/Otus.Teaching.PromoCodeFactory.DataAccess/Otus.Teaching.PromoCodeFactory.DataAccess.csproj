@@ -5,11 +5,18 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <Compile Remove="backup\**" />
+      <EmbeddedResource Remove="backup\**" />
+      <None Remove="backup\**" />
+    </ItemGroup>
+
+    <ItemGroup>
       <None Remove="LocalDatabase.db-shm" />
       <None Remove="LocalDatabase.db-wal" />
     </ItemGroup>
 
     <ItemGroup>
+      <PackageReference Include="AutoMapper" Version="13.0.1" />
       <PackageReference Include="EFCore.NamingConventions" Version="8.0.3" />
       <PackageReference Include="FluentAssertions" Version="6.12.0" />
       <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.3" />
