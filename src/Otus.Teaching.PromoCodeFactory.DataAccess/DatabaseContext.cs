@@ -97,6 +97,7 @@ namespace Otus.Teaching.PromoCodeFactory.DataAccess
             modelBuilder.Entity<PromoCode>()//
                 .HasOne<Customer>(s => s.Customer)
                 .WithMany(g => g.PromoCodes)
+                //.OnDelete(DeleteBehavior.Cascade)
                 .HasForeignKey(s => s.CustomerId);
 
             modelBuilder.Entity<PromoCode>()//можно не указывать
@@ -108,6 +109,9 @@ namespace Otus.Teaching.PromoCodeFactory.DataAccess
                 .HasOne<Role>(s => s.Role)
                 .WithOne()
                 .HasForeignKey<Employee>(g => g.RoleId);
+
+
+
 
             /*            modelBuilder.Entity<PromoCode>()//
                             .HasOne<Employee>(s => s.PartnerManager)

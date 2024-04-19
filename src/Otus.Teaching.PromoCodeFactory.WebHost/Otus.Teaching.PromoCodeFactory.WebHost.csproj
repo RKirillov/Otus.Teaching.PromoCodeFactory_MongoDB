@@ -7,6 +7,11 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <None Remove="LocalDatabase.db-shm" />
+      <None Remove="LocalDatabase.db-wal" />
+    </ItemGroup>
+
+    <ItemGroup>
       <ProjectReference Include="..\Otus.Teaching.PromoCodeFactory.Core\Otus.Teaching.PromoCodeFactory.Core.csproj" />
       <ProjectReference Include="..\Otus.Teaching.PromoCodeFactory.DataAccess\Otus.Teaching.PromoCodeFactory.DataAccess.csproj" />
     </ItemGroup>

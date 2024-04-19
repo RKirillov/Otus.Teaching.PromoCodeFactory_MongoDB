@@ -90,9 +90,9 @@ namespace Otus.Teaching.PromoCodeFactory.DataAccess.Repositories
         /// Добавить в базу сущность.
         /// </summary>
         /// <param name="entity"> Сущность. </param>
-        public virtual async Task AddAsync(T entity)
+        public virtual async Task AddAsync(T entity, CancellationToken cancellationToken = default)
         {
-            await _entitySet.AddAsync(entity);
+            await _entitySet.AddAsync(entity, cancellationToken);
         }
         #endregion
 

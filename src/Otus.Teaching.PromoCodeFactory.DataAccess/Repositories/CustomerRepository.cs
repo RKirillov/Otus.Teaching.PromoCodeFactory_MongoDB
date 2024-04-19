@@ -34,5 +34,30 @@ namespace Otus.Teaching.PromoCodeFactory.DataAccess.Repositories
             return await query.SingleOrDefaultAsync();
             //return await query.SingleOrDefaultAsync(cancellationToken);
         }
+
+        #region UpdateAsync
+        public async Task<int> UpdateAsync(Customer entity, CancellationToken cancellationToken = default)
+        {
+            //TODO check
+            return await _context.Set<Customer>().Where(u => u.Id == entity.Id)
+                .ExecuteUpdateAsync(s => s.SetProperty(u => u, entity), cancellationToken);
+        }
+        #endregion
+
+        #region Update
+        public void Update(Customer entity)
+        {
+            //TODO check
+            _context.Set<Customer>().Update(entity);
+        }
+        #endregion
+
+        #region Remove
+        public void Remove(Customer entity)
+        {
+            //TODO check
+            _context.Set<Customer>().Remove(entity);
+        }
+        #endregion
     }
 }

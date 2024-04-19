@@ -77,6 +77,7 @@ namespace Otus.Teaching.PromoCodeFactory.WebHost.Controllers
             //var promocodes = await _preferenceRepository.GetRangeAsync(request.PreferenceIds, cancellationToken);
             var customer = new Customer()
             {
+                //Id=Guid.NewGuid(),
                 Email = request.Email,
                 FirstName = request.FirstName,
                 LastName = request.LastName,
@@ -87,15 +88,36 @@ namespace Otus.Teaching.PromoCodeFactory.WebHost.Controllers
                 Preference = x
             }).ToList();
             //TODO подключать ли промокоды?
-            await _customerRepository.AddAsync(customer);
+            await _customerRepository.AddAsync(customer, cancellationToken);
+            await _customerRepository.SaveChangesAsync(cancellationToken);
             return CreatedAtAction(nameof(GetCustomerByIdAsync), new { id = customer.Id }, null);
         }
         
         [HttpPut("{id}")]
-        public Task<IActionResult> EditCustomersAsync(Guid id, CreateOrEditCustomerRequest request)
+        public async Task<IActionResult> EditCustomersAsync(Guid id, CreateOrEditCustomerRequest request, CancellationToken cancellationToken)
         {
             //TODO: Обновить данные клиента вместе с его предпочтениями
-            throw new NotImplementedException();
+            var customer = await _customerRepository.GetAsync(id, cancellationToken);
+
+            if (customer == null)
+                return NotFound();
+
+            var preferences = await _preferenceRepository.GetRangeAsync(request.PreferenceIds, cancellationToken);
+            //TODO использовать AutoMapper c настройкой
+
+            customer.Email = request.Email;
+            customer.FirstName = request.FirstName;
+            customer.LastName = request.LastName;
+            //customer.Preferences.Clear();
+            customer.Preferences = preferences.Select(x => new CustomerPreference()
+            {
+                Customer = customer,
+                Preference = x
+            }).ToList();
+
+            await _customerRepository.SaveChangesAsync(cancellationToken);
+
+            return NoContent();
         }
         
         [HttpDelete]
