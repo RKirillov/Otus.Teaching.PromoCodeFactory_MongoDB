@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
-using Castle.Core.Resource;
 using Microsoft.AspNetCore.Mvc;
 using Otus.Teaching.PromoCodeFactory.Core.Domain.PromoCodeManagement;
 using Otus.Teaching.PromoCodeFactory.DataAccess.Repositories;
@@ -34,7 +33,8 @@ namespace Otus.Teaching.PromoCodeFactory.WebHost.Controllers
         /// <summary>
         /// Получить все промокоды
         /// </summary>
-        /// <returns></returns>
+        /// <param name="cancellationToken">Токен отмены</param>
+        /// <returns>Все промокоды</returns>
         [HttpGet]
         public async Task<ActionResult<List<PromoCodeShortResponse>>> GetPromocodesAsync(CancellationToken cancellationToken)
         {
@@ -53,38 +53,40 @@ namespace Otus.Teaching.PromoCodeFactory.WebHost.Controllers
 
             return Ok(response);
         }
-        
+
         /// <summary>
         /// Создать промокод и выдать его клиентам с указанным предпочтением
         /// </summary>
-        /// <returns></returns>
+        /// <param name="request">Запрос на создание промокода</param>
+        /// <param name="cancellationToken">Токен отмены</param>
+        /// <returns>Возвращается промокод</returns>
         [HttpPost]
-        public async Task<PromoCodeShortResponse> GivePromoCodesToCustomersWithPreferenceAsync(GivePromoCodeRequest request, CancellationToken cancellationToken)
+        public async Task<ActionResult> GivePromoCodesToCustomersWithPreferenceAsync(GivePromoCodeRequest request, CancellationToken cancellationToken)
         {
             //TODO: Создать промокод и выдать его клиентам с указанным предпочтением
+            //TODO перенести в сервис
             var newPromoCode = _mapper.Map<PromoCode>(request);
-            //TODO проверку наличия данного промокода не делаю.
 
-            var customers = (await _customerRepository.GetAllAsync(cancellationToken,false))
-                .Where(x => x.Preferences.Select(x => x.Preference.Name)
-                .Contains(request.PreferenceName)).ToList();
+            var customers = (await _customerRepository.GetAllAsync(cancellationToken, false))
+                .Where(x => x.Preferences
+                .Select(x => x.Preference.Name)
+                .Contains(request.PreferenceName));
+
             if (customers.Any())
             {
-                var zz = customers.Select(x=>x.Preferences).FirstOrDefault().Select(x=>x.PreferenceId).FirstOrDefault();
-                newPromoCode.PreferenceId= zz;
+                newPromoCode.PreferenceId = customers.Select(x => x.Preferences).FirstOrDefault().Select(x => x.PreferenceId).FirstOrDefault();
             }
             foreach (var customer in customers)
             {
-                newPromoCode.CustomerId= customer.Id;
+                newPromoCode.CustomerId = customer.Id;
                 customer.PromoCodes.Add(newPromoCode);
             }
             await _promoCodeRepository.AddAsync(newPromoCode, cancellationToken);
             //_promoCodeRepository.SaveChanges();
 
             _customerRepository.SaveChanges();
-            //var customersModel = _mapper.Map<List<CustomerResponse>>(customers);
 
-            return _mapper.Map<PromoCodeShortResponse>(newPromoCode);
+            return Ok(_mapper.Map<PromoCodeShortResponse>(newPromoCode));
         }
     }
 }
