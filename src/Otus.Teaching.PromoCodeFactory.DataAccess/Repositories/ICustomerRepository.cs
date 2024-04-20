@@ -2,6 +2,7 @@
 using Otus.Teaching.PromoCodeFactory.Core.Domain.Administration;
 using Otus.Teaching.PromoCodeFactory.Core.Domain.PromoCodeManagement;
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -17,6 +18,7 @@ namespace Otus.Teaching.PromoCodeFactory.DataAccess.Repositories
         /// <returns></returns>
         Task AddAsync(Customer entity, CancellationToken cancellationToken);
         Task<int> DeleteByIdAsync(Guid id, CancellationToken cancellationToken = default);
+        Task<List<Customer>> GetByPreferences(CancellationToken cancellationToken, string preferenceName);
         void Update(Customer entity);
         Task<int> UpdateAsync(Customer entity, CancellationToken cancellationToken = default);
     }

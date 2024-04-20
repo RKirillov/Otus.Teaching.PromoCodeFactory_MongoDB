@@ -67,11 +67,11 @@ namespace Otus.Teaching.PromoCodeFactory.WebHost.Controllers
             //TODO перенести в сервис
             var newPromoCode = _mapper.Map<PromoCode>(request);
 
-            var customers = (await _customerRepository.GetAllAsync(cancellationToken, false))
-                .Where(x => x.Preferences
-                .Select(x => x.Preference.Name)
-                .Contains(request.PreferenceName));
-
+            /*            var customers = (await _customerRepository.GetAllAsync(cancellationToken, false))
+                            .Where(x => x.Preferences
+                            .Select(x => x.Preference.Name)
+                            .Contains(request.PreferenceName));*/
+            var customers = await _customerRepository.GetByPreferences(cancellationToken, request.PreferenceName);
             if (customers.Any())
             {
                 newPromoCode.PreferenceId = customers.Select(x => x.Preferences).FirstOrDefault().Select(x => x.PreferenceId).FirstOrDefault();

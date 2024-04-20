@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Threading;
 using Otus.Teaching.PromoCodeFactory.Core.Domain.PromoCodeManagement;
+using System.Collections.Generic;
 
 namespace Otus.Teaching.PromoCodeFactory.DataAccess.Repositories
 {
@@ -30,9 +31,8 @@ namespace Otus.Teaching.PromoCodeFactory.DataAccess.Repositories
             var query = _context.Set<Customer>().AsQueryable();
             query = query
                 .Where(l => l.Id == id );//&& !l.Deleted
-
-            return await query.SingleOrDefaultAsync();
-            //return await query.SingleOrDefaultAsync(cancellationToken);
+            //            var query = _context.Set<Customer>().Where(l => l.Id == id);
+            return await query.SingleOrDefaultAsync(cancellationToken);
         }
 
         #region UpdateAsync
@@ -59,6 +59,15 @@ namespace Otus.Teaching.PromoCodeFactory.DataAccess.Repositories
             //            var preferences = _context.Set<Preference>().AsQueryable().Where(t => listIds.Contains(t.Id));
             return await _context.Set<Customer>().Where(u => u.Id == id)
                 .ExecuteDeleteAsync(cancellationToken);
+        }
+        #endregion
+
+        #region GetByPreferences
+        public async Task<List<Customer>> GetByPreferences(CancellationToken cancellationToken, string preferenceName)
+        {
+            return await _context.Set<Customer>().Where(x => x.Preferences
+                .Select(x => x.Preference.Name)
+                .Contains(preferenceName)).ToListAsync(cancellationToken);
         }
         #endregion
     }
