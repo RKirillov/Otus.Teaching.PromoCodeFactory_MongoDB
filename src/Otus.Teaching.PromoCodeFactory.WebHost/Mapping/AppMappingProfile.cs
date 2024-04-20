@@ -30,7 +30,7 @@ namespace Otus.Teaching.PromoCodeFactory.WebHost.Mapping
                 ;
             CreateMap<GivePromoCodeRequest, PromoCode>()
                 .ForMember(dest => dest.ServiceInfo, opt => opt.MapFrom(src => src.ServiceInfo))
-                .ForMember(dest => dest.Code, opt => opt.MapFrom(src => src.PromoCode))
+                .ForMember(dest => dest.Code1, opt => opt.MapFrom(src => src.PromoCode))
                 .ForMember(dest => dest.PartnerName, opt => opt.MapFrom(src => src.PartnerName))
                 .ForSourceMember(dest => dest.PreferenceName, opt => opt.DoNotValidate())
                 .ReverseMap()

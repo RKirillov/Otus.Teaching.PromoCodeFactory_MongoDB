@@ -44,7 +44,7 @@ namespace Otus.Teaching.PromoCodeFactory.WebHost.Controllers
             var response = preferences.Select(x => new PromoCodeShortResponse()
             {
                 Id = x.Id,
-                Code = x.Code,
+                Code = x.Code1,
                 BeginDate = x.BeginDate.ToString(),
                 EndDate = x.EndDate.ToString(),
                 PartnerName = x.PartnerName,

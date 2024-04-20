@@ -142,7 +142,7 @@ namespace Otus.Teaching.PromoCodeFactory.DataAccess.Data
                     new PromoCode()
                     {
                         Id = Guid.Parse("2d5c0b24-0f61-4ae3-ad2a-e0ded5153d09"),
-                        Code = "OSEN2024",
+                        Code1 = "OSEN2024",
                         ServiceInfo = "Сервисная информация1",
                         BeginDate = DateTime.Now,
                         EndDate = DateTime.Now.AddDays(1),
@@ -155,7 +155,7 @@ namespace Otus.Teaching.PromoCodeFactory.DataAccess.Data
                     new PromoCode()
                     {
                         Id = Guid.Parse("33867eef-321b-4b88-a4e6-e57f77e3e57a"),
-                        Code = "LETO2024",
+                        Code1 = "LETO2024",
                         ServiceInfo = "Сервисная информация2",
                         BeginDate = DateTime.Now.AddDays(-1),
                         EndDate = DateTime.Now.AddDays(2),
@@ -168,7 +168,7 @@ namespace Otus.Teaching.PromoCodeFactory.DataAccess.Data
                     new PromoCode()
                     {
                         Id = Guid.Parse("fd49d9a9-609f-4376-bfb4-14b157aae3a9"),
-                        Code = "ZIMA2024",
+                        Code1 = "ZIMA2024",
                         ServiceInfo = "Сервисная информация3",
                         BeginDate = DateTime.Now.AddDays(-3),
                         EndDate = DateTime.Now.AddDays(4),

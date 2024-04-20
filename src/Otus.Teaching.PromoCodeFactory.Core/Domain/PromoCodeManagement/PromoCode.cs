@@ -7,7 +7,7 @@ namespace Otus.Teaching.PromoCodeFactory.Core.Domain.PromoCodeManagement
     public class PromoCode
         : BaseEntity
     {
-        public string Code { get; set; }
+        public string Code1 { get; set; }
 
         public string ServiceInfo { get; set; }
 
