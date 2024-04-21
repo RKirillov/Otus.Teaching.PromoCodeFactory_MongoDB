@@ -121,8 +121,8 @@ namespace Otus.Teaching.PromoCodeFactory.DataAccess
                             .WithMany(g => g.PromoCodes)
                             .HasForeignKey(s => s.PartnerManagerId);*/
 
-            //modelBuilder.Entity<Customer>().Property(c => c.FirstName).HasMaxLength(100);
-            //modelBuilder.Entity<Preference>().Property(c => c.Name).HasMaxLength(100);
+            //modelBuilder.Entity<Customer>().Property(c => c.FirstName).HasMaxLength(120);
+            //modelBuilder.Entity<Preference>().Property(c => c.Name).HasMaxLength(120);
 
             //Инициализация начальных данных
 
