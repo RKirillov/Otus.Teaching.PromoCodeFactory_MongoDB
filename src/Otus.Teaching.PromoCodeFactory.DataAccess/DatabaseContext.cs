@@ -94,11 +94,11 @@ namespace Otus.Teaching.PromoCodeFactory.DataAccess
                 .WithMany() //s => s.CustomerPreference
                 .HasForeignKey(sc => sc.PreferenceId);
 
-/*            modelBuilder.Entity<PromoCode>()//одно и тоже с нижним
-                .HasOne<Customer>(s => s.Customer)
-                .WithMany(g => g.PromoCodes)
-                .OnDelete(DeleteBehavior.Cascade)
-                .HasForeignKey(s => s.CustomerId);*/
+            /*            modelBuilder.Entity<PromoCode>()//одно и тоже с нижним
+                            .HasOne<Customer>(s => s.Customer)
+                            .WithMany(g => g.PromoCodes)
+                            .OnDelete(DeleteBehavior.Cascade)
+                            .HasForeignKey(s => s.CustomerId);*/
             modelBuilder.Entity<Customer>()//
                 .HasMany<PromoCode>(s => s.PromoCodes)
                 .WithOne(g => g.Customer)
@@ -106,18 +106,15 @@ namespace Otus.Teaching.PromoCodeFactory.DataAccess
                 .HasForeignKey(s => s.CustomerId);
 
 
-            modelBuilder.Entity<PromoCode>()//можно не указывать
-           .HasOne<Preference>(s => s.Preference)
-           .WithOne()
-           .HasForeignKey<PromoCode>(s => s.PreferenceId);
+/*            modelBuilder.Entity<PromoCode>()//можно не указывать, если не указать
+               .HasOne<Preference>(s => s.Preference)
+               .WithOne()
+               .HasForeignKey<PromoCode>(s => s.PreferenceId);*/
 
             modelBuilder.Entity<Employee>()//можно не указывать
                 .HasOne<Role>(s => s.Role)
                 .WithOne()
                 .HasForeignKey<Employee>(g => g.RoleId);
-
-
-
 
             /*            modelBuilder.Entity<PromoCode>()//
                             .HasOne<Employee>(s => s.PartnerManager)

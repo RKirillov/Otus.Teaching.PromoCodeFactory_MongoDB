@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Otus.Teaching.PromoCodeFactory.Core.Abstractions.Repositories;
-using Otus.Teaching.PromoCodeFactory.Core.Domain.Administration;
 using Otus.Teaching.PromoCodeFactory.DataAccess.Repositories;
 using Otus.Teaching.PromoCodeFactory.WebHost.Models;
 
@@ -21,19 +18,20 @@ namespace Otus.Teaching.PromoCodeFactory.WebHost.Controllers
         : ControllerBase
     {
         private readonly IEmployeeRepository _employeeRepository;
-        private readonly IMapper _mapper;
-        public EmployeesController(IEmployeeRepository employeeRepository, IMapper mapper)
+        public EmployeesController(IEmployeeRepository employeeRepository)
         {
             _employeeRepository = employeeRepository;
-            _mapper = mapper;
         }
-        
+
         /// <summary>
         /// Получить данные всех сотрудников
         /// </summary>
-        /// <returns></returns>
+        /// <param name="cancellationToken">Токен отмены</param>
+        /// <returns>Коллекция всех сотрудников</returns>
+        /// <response code="200">Получение всех сотрудников успешно</response>
+        [ProducesResponseType(StatusCodes.Status200OK)]
         [HttpGet]
-        public async Task<List<EmployeeShortResponse>> GetEmployeesAsync(CancellationToken cancellationToken)
+        public async Task<ActionResult> GetEmployeesAsync(CancellationToken cancellationToken)
         {
             var employees = await _employeeRepository.GetAllAsync(cancellationToken);
 
@@ -45,15 +43,22 @@ namespace Otus.Teaching.PromoCodeFactory.WebHost.Controllers
                         FullName = x.FullName,
                     }).ToList();
 
-            return employeesModelList;
+            return Ok(employeesModelList);
         }
-        
+
+
         /// <summary>
-        /// Получить данные сотрудника по id
+        /// Получение сотрудника по id
         /// </summary>
-        /// <returns></returns>
+        /// <param name="id">Id сотрудника</param>
+        /// <param name="cancellationToken">Токен отмены</param>
+        /// <returns>Сотрудник</returns>
+        /// <response code="200">Получение сотрудника успешно</response>
+        /// <response code="404">Такого сотрудника не существует</response>
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         [HttpGet("{id:guid}")]
-        public async Task<ActionResult<EmployeeResponse>> GetEmployeeByIdAsync(Guid id, CancellationToken cancellationToken)
+        public async Task<ActionResult> GetEmployeeByIdAsync(Guid id, CancellationToken cancellationToken)
         {
             var employee = await _employeeRepository.GetAsync(id, cancellationToken);
 
@@ -74,7 +79,7 @@ namespace Otus.Teaching.PromoCodeFactory.WebHost.Controllers
                 AppliedPromocodesCount = employee.AppliedPromocodesCount
             };
 
-            return employeeModel;
+            return Ok(employeeModel);
         }
     }
 }

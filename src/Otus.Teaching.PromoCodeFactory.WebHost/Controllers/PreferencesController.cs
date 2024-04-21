@@ -1,11 +1,10 @@
 ﻿
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Otus.Teaching.PromoCodeFactory.Core.Domain.PromoCodeManagement;
 using Otus.Teaching.PromoCodeFactory.DataAccess.Repositories;
 using Otus.Teaching.PromoCodeFactory.WebHost.Models;
 
@@ -26,9 +25,16 @@ namespace Otus.Teaching.PromoCodeFactory.WebHost.Controllers
             _preferenceRepository = preferenceRepository;
             _mapper = mapper;
         }
-        
+
+        /// <summary>
+        /// Получить все предпочтения клиентов
+        /// </summary>
+        /// <param name="cancellationToken">Токен отмены</param>
+        /// <returns>Коллекция предпочтений клиента</returns>
+        /// <response code="200">Получение всех предпочтений успешно</response>
+        [ProducesResponseType(StatusCodes.Status200OK)]
         [HttpGet]
-        public async Task<ActionResult<List<PreferenceResponse>>> GetPreferencesAsync(CancellationToken cancellationToken)
+        public async Task<ActionResult> GetPreferencesAsync(CancellationToken cancellationToken)
         {
             var preferences = await _preferenceRepository.GetAllAsync(cancellationToken,true);
             var preferencesShortsList = _mapper.Map<List<PreferenceResponse>>(preferences);

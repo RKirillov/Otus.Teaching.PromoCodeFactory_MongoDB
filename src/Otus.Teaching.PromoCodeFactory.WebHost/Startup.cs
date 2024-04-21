@@ -6,6 +6,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Otus.Teaching.PromoCodeFactory.Core.Abstractions.Repositories;
+using Otus.Teaching.PromoCodeFactory.Core.Domain.Administration;
 using Otus.Teaching.PromoCodeFactory.Core.Options;
 using Otus.Teaching.PromoCodeFactory.DataAccess;
 using Otus.Teaching.PromoCodeFactory.DataAccess.Data;
@@ -53,6 +55,7 @@ namespace Otus.Teaching.PromoCodeFactory.WebHost
             services.AddScoped<ICustomerRepository, CustomerRepository>();
             services.AddScoped<IPreferenceRepository, PreferenceRepository>();
             services.AddScoped<IPromoCodeRepository, PromoCodeRepository>();
+            services.AddScoped<IRolesRepository, RolesRepository>();
             services.AddControllers(options => options.SuppressAsyncSuffixInActionNames = false);
             services.AddAutoMapper(typeof(AppMappingProfile));
             /*            services.AddSwaggerGen(c =>
@@ -88,6 +91,12 @@ namespace Otus.Teaching.PromoCodeFactory.WebHost
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+            });
+            // Add ReDoc UI to interact with the document
+            // Available at: http://localhost:<port>/redoc
+            app.UseReDoc(options =>
+            {
+                options.Path = "/redoc";
             });
             dbInitializer.InitializeDb();
         }

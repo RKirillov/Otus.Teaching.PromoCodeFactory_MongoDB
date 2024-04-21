@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -7,9 +6,8 @@ using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Otus.Teaching.PromoCodeFactory.DataAccess.Repositories;
 using Otus.Teaching.PromoCodeFactory.WebHost.Models;
-using Microsoft.EntityFrameworkCore;
 using Otus.Teaching.PromoCodeFactory.Core.Domain.PromoCodeManagement;
-using Otus.Teaching.PromoCodeFactory.Core.Domain.Administration;
+using Microsoft.AspNetCore.Http;
 
 namespace Otus.Teaching.PromoCodeFactory.WebHost.Controllers
 {
@@ -24,23 +22,27 @@ namespace Otus.Teaching.PromoCodeFactory.WebHost.Controllers
 
         private readonly ICustomerRepository _customerRepository;
         private readonly IPreferenceRepository _preferenceRepository;
-        //private readonly IPromoCodeRepository _promoCodeRepository;
 
         private readonly IMapper _mapper;
         public CustomersController(ICustomerRepository customerRepository,
             IMapper mapper,
             IPreferenceRepository preferenceRepository
-            //IPromoCodeRepository promoCodeRepository
             )
         {
             _customerRepository = customerRepository;
             _mapper = mapper;
             _preferenceRepository = preferenceRepository;
-            //_promoCodeRepository = promoCodeRepository;
         }
 
+        /// <summary>
+        /// Получить всех клиентов
+        /// </summary>
+        /// <param name="cancellationToken">Токен отмены</param>
+        /// <returns>Коллекция всех клиентов</returns>
+        /// <response code="200">Получение всех клиентов успешно</response>
+        [ProducesResponseType(StatusCodes.Status200OK)]
         [HttpGet]
-        public async Task<List<CustomerShortResponse>> GetCustomersAsync(CancellationToken cancellationToken)
+        public async Task<ActionResult> GetCustomersAsync(CancellationToken cancellationToken)
         {
             var customers = await _customerRepository.GetAllAsync(cancellationToken);
 
@@ -53,33 +55,40 @@ namespace Otus.Teaching.PromoCodeFactory.WebHost.Controllers
                     LastName = x.LastName,
                 }).ToList();
 
-            return employeesModelList;
+            return Ok(employeesModelList);
         }
-
+        /// <summary>
+        /// Получить клиента по id
+        /// </summary>
+        /// <param name="id">Id клиента</param>
+        /// <param name="cancellationToken">Токен отмены</param>
+        /// <returns>Клиент</returns>
+        /// <response code="200">Получение клиентов успешно</response>
+        /// <response code="404">Такого клиента не существует</response>
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         [HttpGet("{id}")]
-        public async Task<ActionResult<CustomerResponse>> GetCustomerByIdAsync(Guid id, CancellationToken cancellationToken)
+        public async Task<ActionResult> GetCustomerByIdAsync(Guid id, CancellationToken cancellationToken)
         {
             var customer = (await _customerRepository.GetAsync(id, cancellationToken));
 
             if (customer == null)
                 return NotFound();
 
-            //var promoCodesShortsList = _mapper.Map<List<PromoCodeShortResponse>>(customer.PromoCodes);
-            /*            var preferencesShortsList = _mapper.Map<List<PreferenceResponse>>(customer.Preferences);
-                        var customerModel = new CustomerResponse()
-                        {
-                            Id = customer.Id,
-                            Email = customer.Email,
-                            FirstName = customer.FirstName,
-                            LastName = customer.LastName,
-                            PromoCodesResponse = promoCodesShortsList,
-                            PreferencesResponse = preferencesShortsList
-                        };*/
             var customerModel = _mapper.Map<CustomerResponse>(customer);
 
-            return customerModel;
+            return Ok(customerModel);
         }
 
+
+        /// <summary>
+        /// Создать клиента
+        /// </summary>
+        /// <param name="request">Сущность задания нового клиента</param>
+        /// <param name="cancellationToken">Токен отмены</param>
+        /// <returns>Клиент</returns>
+        /// <response code="201">Создание клиента успешно</response>
+        [ProducesResponseType(StatusCodes.Status201Created)]
         [HttpPost]
         public async Task<IActionResult> CreateCustomerAsync(CreateOrEditCustomerRequest request, CancellationToken cancellationToken)
         {
@@ -103,6 +112,17 @@ namespace Otus.Teaching.PromoCodeFactory.WebHost.Controllers
             return CreatedAtAction(nameof(GetCustomerByIdAsync), new { id = customer.Id }, null);
         }
 
+        /// <summary>
+        /// Изменить существующего клиента по id
+        /// </summary>
+        /// <param name="id">Id клиента</param>
+        /// <param name="cancellationToken">Токен отмены</param>
+        /// <param name="request">Сущность запросма на изменение клиента</param>
+        /// <returns></returns>
+        /// <response code="204">Изменение клиента прошло успешно</response>
+        /// <response code="404">Такого клиента не существует</response>
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         [HttpPut("{id}")]
         public async Task<IActionResult> EditCustomersAsync(Guid id, CreateOrEditCustomerRequest request, CancellationToken cancellationToken)
         {
@@ -125,11 +145,24 @@ namespace Otus.Teaching.PromoCodeFactory.WebHost.Controllers
                 Preference = x
             }).ToList();
 
+
+            //_customerRepository.SaveChanges();
+
             await _customerRepository.SaveChangesAsync(cancellationToken);
 
             return NoContent();
         }
 
+        /// <summary>
+        /// Удалить клиента по id
+        /// </summary>
+        /// <param name="id">Id клиента</param>
+        /// <param name="cancellationToken">Токен отмены</param>
+        /// <returns></returns>
+        /// <response code="204">Удаление клиента прошло успешно</response>
+        /// <response code="404">Такого клиента не существует</response>
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         [HttpDelete]
         public async Task<IActionResult> DeleteCustomer(Guid id, CancellationToken cancellationToken)
         {

@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Otus.Teaching.PromoCodeFactory.Core.Domain.PromoCodeManagement;
 using Otus.Teaching.PromoCodeFactory.DataAccess.Repositories;
@@ -35,8 +35,10 @@ namespace Otus.Teaching.PromoCodeFactory.WebHost.Controllers
         /// </summary>
         /// <param name="cancellationToken">Токен отмены</param>
         /// <returns>Все промокоды</returns>
+        /// <response code="200">Получение всех промокодов успешно</response>
+        [ProducesResponseType(StatusCodes.Status200OK)]
         [HttpGet]
-        public async Task<ActionResult<List<PromoCodeShortResponse>>> GetPromocodesAsync(CancellationToken cancellationToken)
+        public async Task<ActionResult> GetPromocodesAsync(CancellationToken cancellationToken)
         {
             //TODO: Получить все промокоды 
             var preferences = await _promoCodeRepository.GetAllAsync(cancellationToken);
@@ -60,17 +62,14 @@ namespace Otus.Teaching.PromoCodeFactory.WebHost.Controllers
         /// <param name="request">Запрос на создание промокода</param>
         /// <param name="cancellationToken">Токен отмены</param>
         /// <returns>Возвращается промокод</returns>
+        /// <response code="201">Создание промокода успешно</response>
+        [ProducesResponseType(StatusCodes.Status201Created)]
         [HttpPost]
         public async Task<ActionResult> GivePromoCodesToCustomersWithPreferenceAsync(GivePromoCodeRequest request, CancellationToken cancellationToken)
         {
             //TODO: Создать промокод и выдать его клиентам с указанным предпочтением
-            //TODO перенести в сервис
             var newPromoCode = _mapper.Map<PromoCode>(request);
 
-            /*            var customers = (await _customerRepository.GetAllAsync(cancellationToken, false))
-                            .Where(x => x.Preferences
-                            .Select(x => x.Preference.Name)
-                            .Contains(request.PreferenceName));*/
             var customers = await _customerRepository.GetByPreferences(cancellationToken, request.PreferenceName);
             if (customers.Any())
             {
@@ -82,11 +81,12 @@ namespace Otus.Teaching.PromoCodeFactory.WebHost.Controllers
                 customer.PromoCodes.Add(newPromoCode);
             }
             await _promoCodeRepository.AddAsync(newPromoCode, cancellationToken);
-            //_promoCodeRepository.SaveChanges();
 
             _customerRepository.SaveChanges();
 
-            return Ok(_mapper.Map<PromoCodeShortResponse>(newPromoCode));
+            return CreatedAtAction(nameof(GivePromoCodesToCustomersWithPreferenceAsync), null, _mapper.Map<PromoCodeShortResponse>(newPromoCode));
+            //return Created(string.Empty,_mapper.Map<PromoCodeShortResponse>(newPromoCode));
+            //return StatusCode(201);
         }
     }
 }
