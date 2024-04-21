@@ -138,14 +138,14 @@ namespace Otus.Teaching.PromoCodeFactory.WebHost.Controllers
             customer.Email = request.Email;
             customer.FirstName = request.FirstName;
             customer.LastName = request.LastName;
-            //customer.Preferences.Clear();
+            customer.Preferences.Clear();
             customer.Preferences = preferences.Select(x => new CustomerPreference()
             {
                 Customer = customer,
                 Preference = x
             }).ToList();
 
-
+            _customerRepository.Update(customer);
             //_customerRepository.SaveChanges();
 
             await _customerRepository.SaveChangesAsync(cancellationToken);

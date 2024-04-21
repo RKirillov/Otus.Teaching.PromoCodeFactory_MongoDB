@@ -15,5 +15,6 @@ namespace Otus.Teaching.PromoCodeFactory.DataAccess.Repositories
         Task<T> GetAsync(TPrimaryKey id, CancellationToken cancellationToken);
         void SaveChanges();
         Task SaveChangesAsync(CancellationToken cancellationToken = default);
+        void Update(T entity);
     }
 }

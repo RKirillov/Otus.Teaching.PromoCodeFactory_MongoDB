@@ -103,6 +103,19 @@ namespace Otus.Teaching.PromoCodeFactory.DataAccess.Repositories
         }
         #endregion
 
+        #region Update
+
+        /// <summary>
+        /// Для сущности проставить состояние - что она изменена.
+        /// </summary>
+        /// <param name="entity"> Сущность для изменения. </param>
+        public virtual void Update(T entity)
+        {
+            _context.Entry(entity).State = EntityState.Modified;
+        }
+
+        #endregion
+
         #region SaveChanges
         /// <summary>
         /// Сохранить изменения.
