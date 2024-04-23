@@ -70,7 +70,7 @@ namespace Otus.Teaching.PromoCodeFactory.WebHost.Controllers
             //TODO: Создать промокод и выдать его клиентам с указанным предпочтением
             var newPromoCode = _mapper.Map<PromoCode>(request);
 
-            var customers = await _customerRepository.GetByPreferences(cancellationToken, request.PreferenceName);
+            var customers = await _customerRepository.GetByPreferences(request.PreferenceName, cancellationToken);
             if (customers.Any())
             {
                 newPromoCode.PreferenceId = customers.Select(x => x.Preferences).FirstOrDefault().Select(x => x.PreferenceId).FirstOrDefault();

@@ -18,7 +18,7 @@ namespace Otus.Teaching.PromoCodeFactory.DataAccess.Repositories
         /// <returns></returns>
         Task AddAsync(Customer entity, CancellationToken cancellationToken);
         Task<int> DeleteByIdAsync(Guid id, CancellationToken cancellationToken = default);
-        Task<List<Customer>> GetByPreferences(CancellationToken cancellationToken, string preferenceName);
+        Task<List<Customer>> GetByPreferences(string preferenceName, CancellationToken cancellationToken);
         void Update(Customer entity);
         Task<int> UpdateAsync(Customer entity, CancellationToken cancellationToken = default);
     }

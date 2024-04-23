@@ -19,22 +19,6 @@ namespace Otus.Teaching.PromoCodeFactory.DataAccess.Repositories
 
         }
 
-        /// <summary>
-        /// Получить сущность по Id.
-        /// </summary>
-        /// <param name="id"> Id сущности. </param>
-        /// <param name="cancellationToken"> Токен отмены </param>
-        /// <returns> Курс. </returns>
-        /// TODO Deleted добавлять не стану
-        public override async Task<Customer> GetAsync(Guid id, CancellationToken cancellationToken)
-        {
-            var query = _context.Set<Customer>().AsQueryable();
-            query = query
-                .Where(l => l.Id == id );//&& !l.Deleted
-            //            var query = _context.Set<Customer>().Where(l => l.Id == id);
-            return await query.SingleOrDefaultAsync(cancellationToken);
-        }
-
         #region UpdateAsync
         public async Task<int> UpdateAsync(Customer entity, CancellationToken cancellationToken = default)
         {
@@ -63,12 +47,35 @@ namespace Otus.Teaching.PromoCodeFactory.DataAccess.Repositories
         #endregion
 
         #region GetByPreferences
-        public async Task<List<Customer>> GetByPreferences(CancellationToken cancellationToken, string preferenceName)
+        public async Task<List<Customer>> GetByPreferences(string preferenceName, CancellationToken cancellationToken = default)
         {
             return await _context.Set<Customer>().Where(x => x.Preferences
                 .Select(x => x.Preference.Name)
                 .Contains(preferenceName)).ToListAsync(cancellationToken);
         }
         #endregion
+
+        #region GetAsync
+        /// <summary>
+        /// Получить сущность по Id.
+        /// </summary>
+        /// <param name="id"> Id сущности. </param>
+        /// <param name="cancellationToken"> Токен отмены </param>
+        /// <returns> Курс. </returns>
+        public override async Task<Customer> GetAsync(Guid id, CancellationToken cancellationToken = default)
+        {
+            //var query = _context.Set<Customer>().AsQueryable();
+            //query = query.Where(l => l.Id == id);//&& !l.Deleted
+            //var z = MyQuery(() => _context.Set<Customer>().Where(l => l.Id == id));
+
+            var query = _context.Set<Customer>().Where(l => l.Id == id);
+            return await query.SingleOrDefaultAsync(cancellationToken);
+        }
+        #endregion
+
+        protected private Task<List<Customer>> MyQuery (Func<Customer, bool> myFunc)
+        {
+            return Task.FromResult(new List<Customer>());
+        }
     }
 }
