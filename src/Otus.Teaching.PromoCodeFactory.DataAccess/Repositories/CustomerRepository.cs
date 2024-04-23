@@ -73,9 +73,10 @@ namespace Otus.Teaching.PromoCodeFactory.DataAccess.Repositories
         }
         #endregion
 
-        protected private Task<List<Customer>> MyQuery (Func<Customer, bool> myFunc)
+        protected private bool MyMethod (Func<Customer, bool> myFunc)
         {
-            return Task.FromResult(new List<Customer>());
+            return false;
+            //return Task.FromResult(new List<Customer>());
         }
     }
 }
