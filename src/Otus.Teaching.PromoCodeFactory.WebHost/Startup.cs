@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using MongoDB.Driver;
 using Otus.Teaching.PromoCodeFactory.Core.Abstractions.Repositories;
 using Otus.Teaching.PromoCodeFactory.Core.Domain.Administration;
 using Otus.Teaching.PromoCodeFactory.Core.Options;
@@ -50,6 +51,9 @@ namespace Otus.Teaching.PromoCodeFactory.WebHost
                 opt.UseLazyLoadingProxies();
                 opt.EnableDetailedErrors();
             });
+            var mongoClient = new MongoClient(Configuration["ConnectionOptions:MongoDB"]);
+            var database = mongoClient.GetDatabase("AdministrationDB");
+            services.AddSingleton<IMongoDatabase>(database);
 
             services.AddScoped<IEmployeeRepository, EmployeeRepository>();
             services.AddScoped<ICustomerRepository, CustomerRepository>();

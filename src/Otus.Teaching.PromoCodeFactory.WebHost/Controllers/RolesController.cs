@@ -4,10 +4,13 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Otus.Teaching.PromoCodeFactory.Core.Abstractions.Repositories;
+using Microsoft.Extensions.Logging;
 using Otus.Teaching.PromoCodeFactory.Core.Domain.Administration;
+using MongoDB.Driver;
+using MongoDB.Driver.Linq;
 using Otus.Teaching.PromoCodeFactory.DataAccess.Repositories;
 using Otus.Teaching.PromoCodeFactory.WebHost.Models;
+using AutoMapper;
 
 namespace Otus.Teaching.PromoCodeFactory.WebHost.Controllers
 {
@@ -18,11 +21,14 @@ namespace Otus.Teaching.PromoCodeFactory.WebHost.Controllers
     [Route("api/v1/[controller]")]
     public class RolesController : ControllerBase
     {
-        private readonly IRolesRepository _rolesRepository;
-
-        public RolesController(IRolesRepository rolesRepository)
+        private readonly ILogger<RolesController> _logger;
+        private readonly IMongoCollection<Role> _rolesCollection;
+        private readonly IMapper _mapper;
+        public RolesController(ILogger<RolesController> logger,
+            IMongoDatabase database, IMapper mapper)
         {
-            _rolesRepository = rolesRepository;
+            _logger = logger;
+            _rolesCollection = database.GetCollection<Role>("Roles");
         }
 
         /// <summary>
@@ -35,7 +41,7 @@ namespace Otus.Teaching.PromoCodeFactory.WebHost.Controllers
         [HttpGet]
         public async Task<ActionResult> GetRolesAsync(CancellationToken cancellationToken)
         {
-            var roles = await _rolesRepository.GetAllAsync(cancellationToken);
+            var roles = await _rolesCollection.Find(_ => true).ToListAsync();
 
             var rolesModelList = roles.Select(x => 
                 new RoleItemResponse()
@@ -45,6 +51,19 @@ namespace Otus.Teaching.PromoCodeFactory.WebHost.Controllers
                     Description = x.Description
                 }).ToList();
             return Ok(rolesModelList);
+        }
+
+        /// <summary>
+        /// Добавить роль сотрудника
+        /// </summary>
+        /// <param name="role"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public async Task<ActionResult> PostRoleAsync(Role role)
+        {
+            await _rolesCollection.InsertOneAsync(role);
+
+            return CreatedAtAction(nameof(PostRoleAsync), null, _mapper.Map<RoleItemResponse>(role));
         }
     }
 }
