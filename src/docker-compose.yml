@@ -1,12 +1,14 @@
 version: '3.9'
 services:
   my-api:
-    image: Otus.Teaching.PromoCodeFactory
+    image: otus.teaching.promocodefactory
     build:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "5000:80"
+      - "8080:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
     depends_on:
       - mongodb
   mongodb:

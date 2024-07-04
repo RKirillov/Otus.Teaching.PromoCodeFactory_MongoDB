@@ -32,6 +32,7 @@ namespace Otus.Teaching.PromoCodeFactory.WebHost
             var executedAssembly = Assembly.GetExecutingAssembly();
             var config = new MapperConfiguration(cfg => cfg.AddMaps(executedAssembly));
 
+            services.AddHealthChecks();
             services.AddControllers();
             services.AddSingleton(_ => config.CreateMapper());
             services.AddScoped<IDbInitializer, EfDbInitializer>();
@@ -88,21 +89,22 @@ namespace Otus.Teaching.PromoCodeFactory.WebHost
                 x.DocExpansion = "list";
             });
 
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
 
             app.UseRouting();
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapHealthChecks("/health");
             });
             // Add ReDoc UI to interact with the document
             // Available at: http://localhost:<port>/redoc
-            app.UseReDoc(options =>
-            {
-                options.Path = "/redoc";
-            });
-            dbInitializer.InitializeDb();
+            //app.UseReDoc(options =>
+            //{
+            //    options.Path = "/redoc";
+           // });
+            //dbInitializer.InitializeDb();
         }
     }
     /// <summary>
