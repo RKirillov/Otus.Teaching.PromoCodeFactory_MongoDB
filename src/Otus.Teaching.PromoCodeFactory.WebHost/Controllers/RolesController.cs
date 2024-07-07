@@ -11,6 +11,8 @@ using MongoDB.Driver.Linq;
 using Otus.Teaching.PromoCodeFactory.DataAccess.Repositories;
 using Otus.Teaching.PromoCodeFactory.WebHost.Models;
 using AutoMapper;
+using Otus.Teaching.PromoCodeFactory.DataAccess.MongoDB;
+using Otus.Teaching.PromoCodeFactory.Core.Domain.PromoCodeManagement;
 
 namespace Otus.Teaching.PromoCodeFactory.WebHost.Controllers
 {
@@ -22,13 +24,14 @@ namespace Otus.Teaching.PromoCodeFactory.WebHost.Controllers
     public class RolesController : ControllerBase
     {
         private readonly ILogger<RolesController> _logger;
-        private readonly IMongoCollection<Role> _rolesCollection;
+        private readonly IRoleRepository _roleRepository;
         private readonly IMapper _mapper;
         public RolesController(ILogger<RolesController> logger,
-            IMongoDatabase database, IMapper mapper)
+            IRoleRepository roleRepository, IMapper mapper)
         {
             _logger = logger;
-            _rolesCollection = database.GetCollection<Role>(nameof(Role));
+            _roleRepository = roleRepository;
+            _mapper= mapper;
         }
 
         /// <summary>
@@ -41,7 +44,7 @@ namespace Otus.Teaching.PromoCodeFactory.WebHost.Controllers
         [HttpGet]
         public async Task<ActionResult> GetRolesAsync(CancellationToken cancellationToken)
         {
-            var roles = await _rolesCollection.Find(_ => true).ToListAsync();
+            var roles = await _roleRepository.Collection.Find(_ => true).ToListAsync();
 
             var rolesModelList = roles.Select(x => 
                 new RoleItemResponse()
@@ -58,12 +61,14 @@ namespace Otus.Teaching.PromoCodeFactory.WebHost.Controllers
         /// </summary>
         /// <param name="role"></param>
         /// <returns></returns>
+        [ProducesResponseType(StatusCodes.Status201Created)]
         [HttpPost]
-        public async Task<ActionResult> PostRoleAsync(Role role)
+        public async Task<ActionResult> PostRoleAsync(CreateRoleItemRequest role)
         {
-            await _rolesCollection.InsertOneAsync(role);
+            var _role = _mapper.Map<Role>(role);
+            await _roleRepository.Collection.InsertOneAsync(_role);
 
-            return CreatedAtAction(nameof(PostRoleAsync), null, _mapper.Map<RoleItemResponse>(role));
+            return CreatedAtAction(nameof(PostRoleAsync), null, _mapper.Map<RoleItemResponse>(_role));
         }
     }
 }

@@ -5,7 +5,7 @@ using Otus.Teaching.PromoCodeFactory.WebHost.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using Otus.Teaching.PromoCodeFactory.Core.Domain.Administration;
 using System.Threading.Tasks;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
@@ -25,6 +25,8 @@ namespace Otus.Teaching.PromoCodeFactory.WebHost.Mapping
                 .ForMember(dest => dest.LastName, opt => opt.MapFrom(src => src.LastName))
                 .ForMember(dest => dest.PromoCodesShotResponse, opt => opt.MapFrom(src => src.PromoCodes))
                 .ReverseMap()
+                ;
+            CreateMap<CreateRoleItemRequest, Role>()
                 ;
             CreateMap<Preference, PreferenceResponse>()
                 ;

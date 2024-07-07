@@ -10,8 +10,8 @@ using MongoDB.Driver;
 using Otus.Teaching.PromoCodeFactory.Core.Abstractions.Repositories;
 using Otus.Teaching.PromoCodeFactory.Core.Domain.Administration;
 using Otus.Teaching.PromoCodeFactory.Core.Options;
-using Otus.Teaching.PromoCodeFactory.DataAccess;
 using Otus.Teaching.PromoCodeFactory.DataAccess.Data;
+using Otus.Teaching.PromoCodeFactory.DataAccess.MongoDB;
 using Otus.Teaching.PromoCodeFactory.DataAccess.Repositories;
 using Otus.Teaching.PromoCodeFactory.WebHost.Mapping;
 using System.Reflection;
@@ -59,7 +59,7 @@ namespace Otus.Teaching.PromoCodeFactory.WebHost
             //services.AddSingleton<IMongoDatabase>(database);
 
             services.Configure<MongoDBSettings>(Configuration.GetSection("MongoDB"));
-            services.AddSingleton<IMongoDBService, MongoDBService>();
+            services.AddSingleton<IRoleRepository, RoleRepository>();
 
 /*            services.AddScoped<IEmployeeRepository, EmployeeRepository>();
             services.AddScoped<ICustomerRepository, CustomerRepository>();
