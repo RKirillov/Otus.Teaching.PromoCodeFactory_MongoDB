@@ -8,11 +8,9 @@ using Microsoft.Extensions.Logging;
 using Otus.Teaching.PromoCodeFactory.Core.Domain.Administration;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
-using Otus.Teaching.PromoCodeFactory.DataAccess.Repositories;
 using Otus.Teaching.PromoCodeFactory.WebHost.Models;
 using AutoMapper;
 using Otus.Teaching.PromoCodeFactory.DataAccess.MongoDB;
-using Otus.Teaching.PromoCodeFactory.Core.Domain.PromoCodeManagement;
 
 namespace Otus.Teaching.PromoCodeFactory.WebHost.Controllers
 {
@@ -24,10 +22,10 @@ namespace Otus.Teaching.PromoCodeFactory.WebHost.Controllers
     public class RolesController : ControllerBase
     {
         private readonly ILogger<RolesController> _logger;
-        private readonly IRoleRepository _roleRepository;
+        private readonly IMongoRoleRepository _roleRepository;
         private readonly IMapper _mapper;
         public RolesController(ILogger<RolesController> logger,
-            IRoleRepository roleRepository, IMapper mapper)
+            IMongoRoleRepository roleRepository, IMapper mapper)
         {
             _logger = logger;
             _roleRepository = roleRepository;

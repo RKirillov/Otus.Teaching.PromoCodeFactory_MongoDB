@@ -18,7 +18,7 @@ namespace Otus.Teaching.PromoCodeFactory.DataAccess.Data
                 FirstName = "Иван",
                 LastName = "Сергеев",
                 RoleId = Guid.Parse("53729686-a368-4eeb-8bfa-cc69b6050d02"),// только для HasData
-                //Role = Roles.FirstOrDefault(x => x.Name == "Admin"),// только для AddRange
+                Role = Roles.FirstOrDefault(x => x.Name == "Admin"),// только для AddRange
                 AppliedPromocodesCount = 5
             },
             new Employee()
@@ -28,7 +28,7 @@ namespace Otus.Teaching.PromoCodeFactory.DataAccess.Data
                 FirstName = "Петр",
                 LastName = "Андреев",
                 RoleId = Guid.Parse("b0ae7aac-5493-45cd-ad16-87426a5e7665"),// только для HasData
-                //Role = Roles.FirstOrDefault(x => x.Name == "PartnerManager"),// только для AddRange
+                Role = Roles.FirstOrDefault(x => x.Name == "PartnerManager"),// только для AddRange
                 AppliedPromocodesCount = 10
             },
         };

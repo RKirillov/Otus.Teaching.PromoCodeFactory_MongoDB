@@ -5,9 +5,9 @@ using Otus.Teaching.PromoCodeFactory.Core.Options;
 namespace Otus.Teaching.PromoCodeFactory.DataAccess.MongoDB
 {
     //сделать обстрактным
-    public sealed class RoleRepository : MongoBaseRepository<Role>, IRoleRepository
+    public sealed class MongoRoleRepository : MongoBaseRepository<Role>, IMongoRoleRepository
     {
-        public RoleRepository(IOptions<MongoDBSettings> mongoDBSettings)
+        public MongoRoleRepository(IOptions<MongoDBSettings> mongoDBSettings)
             : base(mongoDBSettings, mongoDBSettings.Value.CollectionRoleName)
         {
         }

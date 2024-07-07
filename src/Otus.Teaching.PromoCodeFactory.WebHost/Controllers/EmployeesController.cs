@@ -2,8 +2,11 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using MongoDB.Driver;
+using Otus.Teaching.PromoCodeFactory.DataAccess.MongoDB;
 using Otus.Teaching.PromoCodeFactory.DataAccess.Repositories;
 using Otus.Teaching.PromoCodeFactory.WebHost.Models;
 
@@ -17,8 +20,9 @@ namespace Otus.Teaching.PromoCodeFactory.WebHost.Controllers
     public class EmployeesController
         : ControllerBase
     {
-        private readonly IEmployeeRepository _employeeRepository;
-        public EmployeesController(IEmployeeRepository employeeRepository)
+        private readonly IMongoEmployeeRepository _employeeRepository;
+        private readonly IMapper _mapper;
+        public EmployeesController(IMongoEmployeeRepository employeeRepository)
         {
             _employeeRepository = employeeRepository;
         }
@@ -33,7 +37,7 @@ namespace Otus.Teaching.PromoCodeFactory.WebHost.Controllers
         [HttpGet]
         public async Task<ActionResult> GetEmployeesAsync(CancellationToken cancellationToken)
         {
-            var employees = await _employeeRepository.GetAllAsync(cancellationToken);
+            var employees = await _employeeRepository.Collection.Find(_ => true).ToListAsync();
 
             var employeesModelList = employees.Select(x => 
                 new EmployeeShortResponse()
@@ -60,7 +64,7 @@ namespace Otus.Teaching.PromoCodeFactory.WebHost.Controllers
         [HttpGet("{id:guid}")]
         public async Task<ActionResult> GetEmployeeByIdAsync(Guid id, CancellationToken cancellationToken)
         {
-            var employee = await _employeeRepository.GetAsync(id, cancellationToken);
+            var employee = await _employeeRepository.Collection.Find(x => x.Id == id).FirstOrDefaultAsync();
 
             if (employee == null)
                 return NotFound();
