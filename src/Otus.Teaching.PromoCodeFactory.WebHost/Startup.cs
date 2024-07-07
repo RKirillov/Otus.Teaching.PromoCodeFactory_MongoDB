@@ -12,10 +12,8 @@ using Otus.Teaching.PromoCodeFactory.Core.Domain.Administration;
 using Otus.Teaching.PromoCodeFactory.Core.Options;
 using Otus.Teaching.PromoCodeFactory.DataAccess.Data;
 using Otus.Teaching.PromoCodeFactory.DataAccess.MongoDB;
-using Otus.Teaching.PromoCodeFactory.DataAccess.Repositories;
 using Otus.Teaching.PromoCodeFactory.WebHost.Mapping;
 using System.Reflection;
-using System.Xml.Linq;
 
 namespace Otus.Teaching.PromoCodeFactory.WebHost
 {
@@ -62,11 +60,6 @@ namespace Otus.Teaching.PromoCodeFactory.WebHost
             services.AddSingleton<IMongoRoleRepository, MongoRoleRepository>();
             services.AddSingleton<IMongoEmployeeRepository, MongoEmployeeRepository>();
 
-            /*            services.AddScoped<IEmployeeRepository, EmployeeRepository>();
-                        services.AddScoped<ICustomerRepository, CustomerRepository>();
-                        services.AddScoped<IPreferenceRepository, PreferenceRepository>();
-                        services.AddScoped<IPromoCodeRepository, PromoCodeRepository>();
-                        services.AddScoped<IRolesRepository, RolesRepository>();*/
             services.AddControllers(options => options.SuppressAsyncSuffixInActionNames = false);
             services.AddAutoMapper(typeof(AppMappingProfile));
             /*            services.AddSwaggerGen(c =>

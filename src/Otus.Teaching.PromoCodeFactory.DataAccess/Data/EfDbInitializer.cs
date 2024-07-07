@@ -1,8 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using MongoDB.Driver;
-using Otus.Teaching.PromoCodeFactory.Core.Domain.Administration;
-using Otus.Teaching.PromoCodeFactory.DataAccess.MongoDB;
-using System.Threading.Tasks;
+﻿using Otus.Teaching.PromoCodeFactory.DataAccess.MongoDB;
 
 namespace Otus.Teaching.PromoCodeFactory.DataAccess.Data
 {
