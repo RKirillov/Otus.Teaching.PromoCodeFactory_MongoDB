@@ -28,7 +28,7 @@ namespace Otus.Teaching.PromoCodeFactory.WebHost.Controllers
             IMongoDatabase database, IMapper mapper)
         {
             _logger = logger;
-            _rolesCollection = database.GetCollection<Role>("Roles");
+            _rolesCollection = database.GetCollection<Role>(nameof(Role));
         }
 
         /// <summary>

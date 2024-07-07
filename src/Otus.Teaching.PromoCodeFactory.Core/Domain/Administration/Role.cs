@@ -1,4 +1,6 @@
-﻿using Otus.Teaching.PromoCodeFactory.Core.Domain.PromoCodeManagement;
+﻿using MongoDB.Bson.Serialization.Attributes;
+using MongoDB.Bson;
+using Otus.Teaching.PromoCodeFactory.Core.Domain.PromoCodeManagement;
 using System;
 
 namespace Otus.Teaching.PromoCodeFactory.Core.Domain.Administration

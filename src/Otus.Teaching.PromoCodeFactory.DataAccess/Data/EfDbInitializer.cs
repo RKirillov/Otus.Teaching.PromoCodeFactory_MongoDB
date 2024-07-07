@@ -1,21 +1,25 @@
-﻿using System.Threading.Tasks;
+﻿using Microsoft.EntityFrameworkCore;
+using MongoDB.Driver;
+using Otus.Teaching.PromoCodeFactory.Core.Domain.Administration;
+using System.Threading.Tasks;
 
 namespace Otus.Teaching.PromoCodeFactory.DataAccess.Data
 {
     public class EfDbInitializer
         : IDbInitializer
     {
-        private readonly DatabaseContext _dataContext;
+        private readonly IMongoDBService _mongoDBService;
 
-        public EfDbInitializer(DatabaseContext dataContext)
+        public EfDbInitializer(IMongoDBService mongoDBService)
         {
-            _dataContext = dataContext;
+
+            _mongoDBService = mongoDBService;
+            //database.DropCollection(nameof(Role));
         }
         
         public void InitializeDb()
         {
-            _dataContext.Database.EnsureDeleted();
-            _dataContext.Database.EnsureCreated();
+            _mongoDBService.InsertManyAsync(FakeDataFactory.Roles);
 
             //_dataContext.AddRange(FakeDataFactory.Employees);
             //_dataContext.SaveChanges();

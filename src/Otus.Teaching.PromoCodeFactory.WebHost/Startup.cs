@@ -15,6 +15,7 @@ using Otus.Teaching.PromoCodeFactory.DataAccess.Data;
 using Otus.Teaching.PromoCodeFactory.DataAccess.Repositories;
 using Otus.Teaching.PromoCodeFactory.WebHost.Mapping;
 using System.Reflection;
+using System.Xml.Linq;
 
 namespace Otus.Teaching.PromoCodeFactory.WebHost
 {
@@ -46,21 +47,25 @@ namespace Otus.Teaching.PromoCodeFactory.WebHost
 
             var options = Configuration.GetSection<ConnectionOptions>();
             services.AddSingleton(options);
-            services.AddDbContext<DatabaseContext>(opt =>
+/*            services.AddDbContext<DatabaseContext>(opt =>
             {
                 opt.EnableSensitiveDataLogging();
                 opt.UseLazyLoadingProxies();
                 opt.EnableDetailedErrors();
-            });
-            var mongoClient = new MongoClient(Configuration["ConnectionOptions:MongoDB"]);
-            var database = mongoClient.GetDatabase("AdministrationDB");
-            services.AddSingleton<IMongoDatabase>(database);
+            });*/
+            //var mongoClient = new MongoClient(Configuration["ConnectionOptions:MongoDB"]);
+            //mongoClient.DropDatabase("AdministrationDB");
+            //var database = mongoClient.GetDatabase("AdministrationDB");
+            //services.AddSingleton<IMongoDatabase>(database);
 
-            services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+            services.Configure<MongoDBSettings>(Configuration.GetSection("MongoDB"));
+            services.AddSingleton<IMongoDBService, MongoDBService>();
+
+/*            services.AddScoped<IEmployeeRepository, EmployeeRepository>();
             services.AddScoped<ICustomerRepository, CustomerRepository>();
             services.AddScoped<IPreferenceRepository, PreferenceRepository>();
             services.AddScoped<IPromoCodeRepository, PromoCodeRepository>();
-            services.AddScoped<IRolesRepository, RolesRepository>();
+            services.AddScoped<IRolesRepository, RolesRepository>();*/
             services.AddControllers(options => options.SuppressAsyncSuffixInActionNames = false);
             services.AddAutoMapper(typeof(AppMappingProfile));
             /*            services.AddSwaggerGen(c =>
@@ -104,7 +109,7 @@ namespace Otus.Teaching.PromoCodeFactory.WebHost
             //{
             //    options.Path = "/redoc";
            // });
-            //dbInitializer.InitializeDb();
+            dbInitializer.InitializeDb();
         }
     }
     /// <summary>
