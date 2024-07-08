@@ -12,10 +12,9 @@ namespace Otus.Teaching.PromoCodeFactory.DataAccess.MongoDB
     public interface IMongoBaseRepository<Entity> where Entity : BaseEntity
     {
         // Expose the MongoDB collection via the interface
-        IMongoCollection<Entity> Collection { get; }
         Task<List<Entity>> GetAsync();
-        Task CreateAsync(Entity playlist);
-        Task AddToPlaylistAsync(string id, string movieId);
+        Task InsertOneAsync(Entity playlist);
+        Task<Entity> GetByIdAsync(Guid id);
         Task DeleteAsync(string id);
 
         Task InsertManyAsync(List<Entity> entities);

@@ -42,7 +42,7 @@ namespace Otus.Teaching.PromoCodeFactory.WebHost.Controllers
         [HttpGet]
         public async Task<ActionResult> GetRolesAsync(CancellationToken cancellationToken)
         {
-            var roles = await _roleRepository.Collection.Find(_ => true).ToListAsync();
+            var roles = await _roleRepository.GetAsync();
 
             var rolesModelList = roles.Select(x => 
                 new RoleItemResponse()
@@ -64,7 +64,7 @@ namespace Otus.Teaching.PromoCodeFactory.WebHost.Controllers
         public async Task<ActionResult> PostRoleAsync(CreateRoleItemRequest role)
         {
             var _role = _mapper.Map<Role>(role);
-            await _roleRepository.Collection.InsertOneAsync(_role);
+            await _roleRepository.InsertOneAsync(_role);
 
             return CreatedAtAction(nameof(PostRoleAsync), null, _mapper.Map<RoleItemResponse>(_role));
         }

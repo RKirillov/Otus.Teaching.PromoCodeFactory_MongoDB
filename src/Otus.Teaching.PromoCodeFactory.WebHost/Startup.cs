@@ -45,16 +45,6 @@ namespace Otus.Teaching.PromoCodeFactory.WebHost
 
             var options = Configuration.GetSection<ConnectionOptions>();
             services.AddSingleton(options);
-/*            services.AddDbContext<DatabaseContext>(opt =>
-            {
-                opt.EnableSensitiveDataLogging();
-                opt.UseLazyLoadingProxies();
-                opt.EnableDetailedErrors();
-            });*/
-            //var mongoClient = new MongoClient(Configuration["ConnectionOptions:MongoDB"]);
-            //mongoClient.DropDatabase("AdministrationDB");
-            //var database = mongoClient.GetDatabase("AdministrationDB");
-            //services.AddSingleton<IMongoDatabase>(database);
 
             services.Configure<MongoDBSettings>(Configuration.GetSection("MongoDB"));
             services.AddSingleton<IMongoRoleRepository, MongoRoleRepository>();

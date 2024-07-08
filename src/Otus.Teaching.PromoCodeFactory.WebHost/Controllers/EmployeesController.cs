@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MongoDB.Driver;
 using Otus.Teaching.PromoCodeFactory.DataAccess.MongoDB;
-using Otus.Teaching.PromoCodeFactory.DataAccess.Repositories;
 using Otus.Teaching.PromoCodeFactory.WebHost.Models;
 
 namespace Otus.Teaching.PromoCodeFactory.WebHost.Controllers
@@ -37,7 +36,7 @@ namespace Otus.Teaching.PromoCodeFactory.WebHost.Controllers
         [HttpGet]
         public async Task<ActionResult> GetEmployeesAsync(CancellationToken cancellationToken)
         {
-            var employees = await _employeeRepository.Collection.Find(_ => true).ToListAsync();
+            var employees = await _employeeRepository.GetAsync();
 
             var employeesModelList = employees.Select(x => 
                 new EmployeeShortResponse()
@@ -49,7 +48,6 @@ namespace Otus.Teaching.PromoCodeFactory.WebHost.Controllers
 
             return Ok(employeesModelList);
         }
-
 
         /// <summary>
         /// Получение сотрудника по id
@@ -64,7 +62,7 @@ namespace Otus.Teaching.PromoCodeFactory.WebHost.Controllers
         [HttpGet("{id:guid}")]
         public async Task<ActionResult> GetEmployeeByIdAsync(Guid id, CancellationToken cancellationToken)
         {
-            var employee = await _employeeRepository.Collection.Find(x => x.Id == id).FirstOrDefaultAsync();
+            var employee = await _employeeRepository.GetByIdAsync(id);
 
             if (employee == null)
                 return NotFound();

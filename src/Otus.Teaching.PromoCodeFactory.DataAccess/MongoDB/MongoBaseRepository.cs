@@ -12,24 +12,24 @@ namespace Otus.Teaching.PromoCodeFactory.DataAccess.MongoDB
     public abstract class MongoBaseRepository<Entity> : IMongoBaseRepository<Entity> where Entity : BaseEntity
     {
         // Public property to expose the MongoDB collection
-        public IMongoCollection<Entity> Collection { get; }
+        private IMongoCollection<Entity> _collection { get; }
 
         public MongoBaseRepository(IOptions<MongoDBSettings> mongoDBSettings, string collectionName)
         {
             MongoClient client = new MongoClient(mongoDBSettings.Value.ConnectionURI);
             IMongoDatabase database = client.GetDatabase(mongoDBSettings.Value.DatabaseName);
-            Collection = database.GetCollection<Entity>(collectionName);
+            _collection = database.GetCollection<Entity>(collectionName);
             database.DropCollection(collectionName);
         }
 
-        public Task AddToPlaylistAsync(string id, string movieId)
+        public async Task<Entity> GetByIdAsync(Guid id)
         {
-            throw new NotImplementedException();
+            return await _collection.Find(x => x.Id == id).FirstOrDefaultAsync();
         }
 
-        public Task CreateAsync(Entity playlist)
+        public async Task InsertOneAsync(Entity entity)
         {
-            throw new NotImplementedException();
+            await _collection.InsertOneAsync(entity);
         }
 
         public Task DeleteAsync(string id)
@@ -37,14 +37,14 @@ namespace Otus.Teaching.PromoCodeFactory.DataAccess.MongoDB
             throw new NotImplementedException();
         }
 
-        public Task<List<Entity>> GetAsync()
+        public async Task<List<Entity>> GetAsync()
         {
-            throw new NotImplementedException();
+            return await _collection.Find(_ => true).ToListAsync();
         }
 
         public async Task InsertManyAsync(List<Entity> entities)
         {
-            await Collection.InsertManyAsync(entities);
+            await _collection.InsertManyAsync(entities);
         }
     }
 }
