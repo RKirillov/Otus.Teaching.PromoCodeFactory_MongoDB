@@ -22,10 +22,10 @@ namespace Otus.Teaching.PromoCodeFactory.WebHost.Controllers
     public class RolesController : ControllerBase
     {
         private readonly ILogger<RolesController> _logger;
-        private readonly IMongoRoleRepository _roleRepository;
+        private readonly IRolesRepository _roleRepository;
         private readonly IMapper _mapper;
         public RolesController(ILogger<RolesController> logger,
-            IMongoRoleRepository roleRepository, IMapper mapper)
+            IRolesRepository roleRepository, IMapper mapper)
         {
             _logger = logger;
             _roleRepository = roleRepository;

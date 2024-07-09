@@ -19,9 +19,9 @@ namespace Otus.Teaching.PromoCodeFactory.WebHost.Controllers
     public class EmployeesController
         : ControllerBase
     {
-        private readonly IMongoEmployeeRepository _employeeRepository;
+        private readonly IEmployeesRepository _employeeRepository;
         private readonly IMapper _mapper;
-        public EmployeesController(IMongoEmployeeRepository employeeRepository)
+        public EmployeesController(IEmployeesRepository employeeRepository)
         {
             _employeeRepository = employeeRepository;
         }

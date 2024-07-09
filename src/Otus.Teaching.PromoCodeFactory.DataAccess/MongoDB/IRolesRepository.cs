@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Otus.Teaching.PromoCodeFactory.DataAccess.MongoDB
 {
-    public interface IMongoRoleRepository : IMongoBaseRepository<Role>
+    public interface IRolesRepository : IMongoBaseRepository<Role>
     {
         /*        Task<List<Role>> GetAsync();
                 Task CreateAsync(Role playlist);

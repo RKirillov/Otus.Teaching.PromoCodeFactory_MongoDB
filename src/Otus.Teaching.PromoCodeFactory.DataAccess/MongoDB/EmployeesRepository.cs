@@ -6,9 +6,9 @@ using Otus.Teaching.PromoCodeFactory.DataAccess.Repositories;
 namespace Otus.Teaching.PromoCodeFactory.DataAccess.MongoDB
 {
     //сделать обстрактным
-    public sealed class MongoEmployeeRepository : MongoBaseRepository<Employee>, IMongoEmployeeRepository
+    public sealed class EmployeesRepository : MongoBaseRepository<Employee>, IEmployeesRepository
     {
-        public MongoEmployeeRepository(IOptions<MongoDBSettings> mongoDBSettings)
+        public EmployeesRepository(IOptions<MongoDBSettings> mongoDBSettings)
             : base(mongoDBSettings, mongoDBSettings.Value.CollectionEmployeeName)
         {
         }

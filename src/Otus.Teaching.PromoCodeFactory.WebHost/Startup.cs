@@ -47,8 +47,8 @@ namespace Otus.Teaching.PromoCodeFactory.WebHost
             services.AddSingleton(options);
 
             services.Configure<MongoDBSettings>(Configuration.GetSection("MongoDB"));
-            services.AddSingleton<IMongoRoleRepository, MongoRoleRepository>();
-            services.AddSingleton<IMongoEmployeeRepository, MongoEmployeeRepository>();
+            services.AddSingleton<IRolesRepository, RolesRepository>();
+            services.AddSingleton<IEmployeesRepository, EmployeesRepository>();
 
             services.AddControllers(options => options.SuppressAsyncSuffixInActionNames = false);
             services.AddAutoMapper(typeof(AppMappingProfile));

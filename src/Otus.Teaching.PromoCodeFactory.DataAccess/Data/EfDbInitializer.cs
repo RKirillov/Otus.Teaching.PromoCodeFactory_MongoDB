@@ -5,9 +5,9 @@ namespace Otus.Teaching.PromoCodeFactory.DataAccess.Data
     public class EfDbInitializer
         : IDbInitializer
     {
-        private readonly IMongoRoleRepository _mRoleRepository;
-        private readonly IMongoEmployeeRepository _mEmployeeRepository;
-        public EfDbInitializer(IMongoRoleRepository mRoleRepository, IMongoEmployeeRepository mEmployeeRepository)
+        private readonly IRolesRepository _mRoleRepository;
+        private readonly IEmployeesRepository _mEmployeeRepository;
+        public EfDbInitializer(IRolesRepository mRoleRepository, IEmployeesRepository mEmployeeRepository)
         {
 
             _mRoleRepository = mRoleRepository;
